@@ -6,8 +6,8 @@
   "scripts": {
     "ready": "vp check && vp run -r test && vp run -r build",
     "dev": "pnpm --filter client --filter server --parallel dev",
-    "dev:client": "vp run client#dev",
-    "dev:server": "vp run server#dev",
+    "dev:client": "pnpm --filter client",
+    "dev:server": "pnpm --filter server",
     "prepare": "vp config"
   },
   "devDependencies": {
