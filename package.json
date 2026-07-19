@@ -5,17 +5,14 @@
   "type": "module",
   "scripts": {
     "ready": "vp check && vp run -r test && vp run -r build",
-    "dev": "pnpm --filter client --filter server --parallel dev",
-    "dev:client": "pnpm --filter client",
-    "dev:server": "pnpm --filter server",
+    "dev": "vp run client#dev",
     "prepare": "vp config"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "catalog:",
     "vite-plus": "catalog:"
   },
   "engines": {
     "node": ">=22.12.0"
   },
-  "packageManager": "pnpm@11.14.0"
+  "packageManager": "pnpm@11.15.0"
 }
