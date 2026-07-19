@@ -4,13 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite-node --watch src/main.ts",
+    "dev": "vite-node -c ../../vite.config.ts --watch src/main.ts",
     "build": "vp build"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "typescript": "catalog:",
-    "vite-node": "catalog:",
-    "vite-plus": "catalog:"
+    "vite-node": "catalog:"
   }
 }

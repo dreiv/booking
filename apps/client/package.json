@@ -4,17 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vp dev",
-    "build": "tsc && vp build",
+    "dev": "vp dev -c ../../vite.config.ts",
+    "build": "vp build -c ../../vite.config.ts",
     "preview": "vp preview"
   },
   "dependencies": {
     "vue": "catalog:"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "catalog:",
-    "typescript": "catalog:",
-    "vite": "catalog:",
-    "vite-plus": "catalog:"
+    "typescript": "catalog:"
   }
 }
