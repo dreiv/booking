@@ -4,13 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vp dev",
-    "build": "tsc && vp build",
-    "preview": "vp preview"
+    "dev": "tsx watch src/main.ts",
+    "build": "vp build"
   },
   "devDependencies": {
-    "typescript": "~6.0.2",
-    "vite": "catalog:",
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
     "vite-plus": "catalog:"
   }
 }

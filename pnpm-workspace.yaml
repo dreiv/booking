@@ -6,11 +6,12 @@ packages:
 catalogMode: prefer
 
 catalog:
-  "@types/node": ^24
+  "@types/node": ^24.13.3
   typescript: ^5
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vitest: npm:@voidzero-dev/vite-plus-test@latest
   vite-plus: latest
+  tsx: ^4.23.1
 overrides:
   vite: "catalog:"
   vitest: "catalog:"
@@ -21,3 +22,5 @@ peerDependencyRules:
   allowedVersions:
     vite: "*"
     vitest: "*"
+allowBuilds:
+  esbuild: true
