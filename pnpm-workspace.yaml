@@ -7,12 +7,14 @@ catalogMode: prefer
 
 catalog:
   "@types/node": ^24.13.3
-  typescript: ^5
+  typescript: ^7
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vitest: npm:@voidzero-dev/vite-plus-test@latest
   vite-plus: latest
   tsx: ^4.23.1
-  vite-node: ^6.0.0
+  vite-node: ^6
+  vue: ^3.5.40
+  "@vitejs/plugin-vue": ^6.0.8
 overrides:
   vite: "catalog:"
   vitest: "catalog:"

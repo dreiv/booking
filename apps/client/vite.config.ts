@@ -1,6 +1,9 @@
 import { defineConfig } from "vite-plus";
+import type { UserConfig } from "vite-plus";
+import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
+  plugins: [vue()],
   server: {
     proxy: {
       "/api": {
@@ -10,4 +13,4 @@ export default defineConfig({
       },
     },
   },
-});
+} as UserConfig);
