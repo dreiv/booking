@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "build": "tsc && vp build",
-    "preview": "vp preview"
+    "build": "tsc && vp build"
   },
   "devDependencies": {
-    "typescript": "~6.0.2",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plus": "catalog:"
   }
