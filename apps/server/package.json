@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vp pack --watch",
+    "dev": "node --watch src/main.ts",
     "build": "vp pack",
     "start": "node dist/main.mjs",
     "test": "vp test"
