@@ -2,7 +2,8 @@ import { defineConfig } from 'vite-plus';
 
 export default defineConfig({
   pack: {
-    dts: true,
-    exports: true,
+    entry: ['src/main.ts'],
+    format: ['esm'],
+    target: 'node22',
   },
 });

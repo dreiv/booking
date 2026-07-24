@@ -6,6 +6,6 @@ export default defineConfig({
   lint: { options: { typeAware: true, typeCheck: true } },
   run: { cache: true },
   test: {
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'tests/**/*.test.ts'],
   },
 });

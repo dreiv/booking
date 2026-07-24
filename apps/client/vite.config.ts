@@ -1,6 +1,5 @@
-import { defineConfig } from 'vite';
+import { defineConfig, lazyPlugins } from 'vite-plus';
 import vue from '@vitejs/plugin-vue';
-import { lazyPlugins } from 'vite-plus';
 
 // https://vite.dev/config/
 export default defineConfig({
