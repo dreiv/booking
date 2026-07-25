@@ -1,11 +1,12 @@
 import { configDefaults, defineConfig, lazyPlugins } from 'vite-plus';
+import tailwindcss from '@tailwindcss/vite';
 import { playwright } from '@vitest/browser-playwright';
 import vue from '@vitejs/plugin-vue';
 import { fileURLToPath, URL } from 'node:url';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: lazyPlugins(() => [vue()]),
+  plugins: lazyPlugins(() => [vue(), tailwindcss()]),
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   server: {
     proxy: {
