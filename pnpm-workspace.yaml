@@ -17,6 +17,10 @@ catalog:
   msw: ^2.15.0
   '@playwright/test': ^1.61.1
   '@axe-core/playwright': ^4.12.1
+  knip: ^6.29.0
+  size-limit: ^13.0.1
+  '@size-limit/preset-app': ^13.0.1
+  '@lhci/cli': ^0.15.1
 overrides:
   vite: 'catalog:'
   vitest: 'catalog:'
@@ -30,3 +34,4 @@ peerDependencyRules:
 allowBuilds:
   esbuild: true
   msw: false
+  puppeteer: true

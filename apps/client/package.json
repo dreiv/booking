@@ -7,30 +7,47 @@
     "dev": "vp dev",
     "build": "vue-tsc -b && vp build",
     "preview": "vp preview",
+    "check": "vp check && knip",
     "test": "vp test",
     "test:unit": "vp test --project unit",
     "test:browser": "vp test --project browser",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "size": "pnpm build && size-limit",
+    "lhci": "lhci autorun"
   },
   "dependencies": {
     "vue": "^3.5.39"
   },
   "devDependencies": {
     "@axe-core/playwright": "catalog:",
+    "@lhci/cli": "catalog:",
     "@playwright/test": "catalog:",
+    "@size-limit/preset-app": "catalog:",
     "@types/node": "catalog:",
     "@vitejs/plugin-vue": "^6.0.7",
     "@vitest/browser": "catalog:",
     "@vitest/browser-playwright": "catalog:",
     "@vue/tsconfig": "^0.9.1",
+    "knip": "catalog:",
     "msw": "catalog:",
     "playwright": "catalog:",
+    "size-limit": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plus": "catalog:",
     "vitest": "catalog:",
     "vitest-browser-vue": "catalog:",
     "vue-tsc": "^3.3.5"
-  }
+  },
+  "size-limit": [
+    {
+      "path": "dist/assets/*.js",
+      "limit": "250 kB"
+    },
+    {
+      "path": "dist/assets/*.css",
+      "limit": "50 kB"
+    }
+  ]
 }
