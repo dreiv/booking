@@ -16,6 +16,7 @@ catalog:
   vitest-browser-vue: ^2.1.0
   msw: ^2.15.0
   '@playwright/test': ^1.61.1
+  '@axe-core/playwright': ^4.12.1
 overrides:
   vite: 'catalog:'
   vitest: 'catalog:'
