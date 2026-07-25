@@ -6,20 +6,30 @@
   "scripts": {
     "dev": "vp dev",
     "build": "vue-tsc -b && vp build",
+    "preview": "vp preview",
     "test": "vp test",
-    "preview": "vp preview"
+    "test:unit": "vp test --project unit",
+    "test:browser": "vp test --project browser",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "vue": "^3.5.39"
   },
   "devDependencies": {
+    "@playwright/test": "catalog:",
     "@types/node": "catalog:",
     "@vitejs/plugin-vue": "^6.0.7",
+    "@vitest/browser": "catalog:",
+    "@vitest/browser-playwright": "catalog:",
     "@vue/tsconfig": "^0.9.1",
+    "msw": "catalog:",
+    "playwright": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plus": "catalog:",
     "vitest": "catalog:",
+    "vitest-browser-vue": "catalog:",
     "vue-tsc": "^3.3.5"
   }
 }

@@ -1,9 +1,12 @@
-import { defineConfig, lazyPlugins } from 'vite-plus';
+import { configDefaults, defineConfig, lazyPlugins } from 'vite-plus';
+import { playwright } from '@vitest/browser-playwright';
 import vue from '@vitejs/plugin-vue';
+import { fileURLToPath, URL } from 'node:url';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: lazyPlugins(() => [vue()]),
+  resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   server: {
     proxy: {
       '/api': {
@@ -12,5 +15,31 @@ export default defineConfig({
         secure: false,
       },
     },
+  },
+  test: {
+    exclude: [...configDefaults.exclude, '**/e2e/**'],
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'unit',
+          environment: 'node',
+          include: ['{src,tests}/**/*.unit.ts'],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: 'browser',
+          include: ['{src,tests}/**/*.browser.ts'],
+          setupFiles: ['./tests/setupTests.ts'],
+          browser: {
+            enabled: true,
+            provider: playwright() as never,
+            instances: [{ browser: 'chromium', headless: true }],
+          },
+        },
+      },
+    ],
   },
 });
