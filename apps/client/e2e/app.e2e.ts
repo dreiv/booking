@@ -36,5 +36,6 @@ test.describe('Client App - E2E Suite', () => {
     });
 
     await page.goto('/');
+    await expect(page.getByText('Failed to connect to backend server')).toBeVisible();
   });
 });

@@ -6,6 +6,8 @@ const serverMessage = ref('Connecting to server...');
 onMounted(async () => {
   try {
     const res = await fetch('/api');
+    if (!res.ok) throw new Error();
+
     const data = await res.json();
     serverMessage.value = data.message;
   } catch {
