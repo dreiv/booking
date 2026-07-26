@@ -1,27 +1,7 @@
 packages:
   - apps/*
   - packages/*
-
 catalogMode: prefer
-
-catalog:
-  '@types/node': ^24
-  typescript: ^6
-  vite: ^6
-  vitest: ^4.1.10
-  vite-plus: latest
-  playwright: ^1.61.1
-  '@vitest/browser-playwright': ^4.1.10
-  vitest-browser-vue: ^2.1.0
-  msw: ^2.15.0
-  '@playwright/test': ^1.61.1
-  '@axe-core/playwright': ^4.12.1
-  knip: ^6.29.0
-  size-limit: ^13.0.1
-  '@size-limit/preset-app': ^13.0.1
-  '@lhci/cli': ^0.15.1
-  '@tailwindcss/vite': ^4.3.3
-  tailwindcss: ^4.3.3
 overrides:
   vite: 'catalog:'
   vitest: 'catalog:'
@@ -36,3 +16,25 @@ allowBuilds:
   esbuild: true
   msw: false
   puppeteer: true
+catalog:
+  '@axe-core/playwright': ^4.12.1
+  '@lhci/cli': ^0.15.1
+  '@playwright/test': ^1.61.1
+  '@size-limit/preset-app': ^13.0.1
+  '@tailwindcss/vite': ^4.3.3
+  '@types/node': ^24
+  '@vitejs/plugin-vue': ^6.0.7
+  '@vitest/browser-playwright': ^4.1.10
+  '@vue/tsconfig': ^0.9.1
+  knip: ^6.29.0
+  msw: ^2.15.0
+  playwright: ^1.61.1
+  size-limit: ^13.0.1
+  tailwindcss: ^4.3.3
+  typescript: ^6
+  vite: ^6
+  vite-plus: latest
+  vitest: ^4.1.10
+  vitest-browser-vue: ^2.1.0
+  vue: ^3.5.39
+  vue-tsc: ^3.3.5
