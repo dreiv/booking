@@ -35,6 +35,7 @@
     "size-limit": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
+    "utils": "workspace:*",
     "vite": "catalog:",
     "vite-plus": "catalog:",
     "vitest": "catalog:",

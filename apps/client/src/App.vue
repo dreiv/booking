@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { fetchBookings } from './api/bookings.ts';
+import type { components } from 'utils/api-types';
 
-const serverMessage = ref('Connecting to server...');
+type Booking = components['schemas']['Booking'];
+
+const bookings = ref<Booking[]>([]);
+const error = ref<string | null>(null);
 
 onMounted(async () => {
   try {
-    const res = await fetch('/api');
-    if (!res.ok) throw new Error();
-
-    const data = await res.json();
-    serverMessage.value = data.message;
+    bookings.value = await fetchBookings();
   } catch {
-    serverMessage.value = 'Failed to connect to backend server';
+    error.value = 'Failed to connect to backend server';
   }
 });
 </script>
@@ -19,16 +20,11 @@ onMounted(async () => {
 <template>
   <main>
     <h1>Booking Client</h1>
-    <p>
-      Server Status: <strong>{{ serverMessage }}</strong>
-    </p>
+    <p v-if="error" role="alert">{{ error }}</p>
+    <ul v-else>
+      <li v-for="booking in bookings" :key="booking.id">
+        {{ booking.guestName }} — {{ booking.roomType }} ({{ booking.status }})
+      </li>
+    </ul>
   </main>
 </template>
-
-<style scoped>
-main {
-  font-family: system-ui, sans-serif;
-  padding: 2rem;
-  text-align: center;
-}
-</style>

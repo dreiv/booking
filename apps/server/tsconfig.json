@@ -5,5 +5,5 @@
     "types": ["node"],
     "allowArbitraryExtensions": true
   },
-  "include": ["src"]
+  "include": ["src", "scripts"]
 }
