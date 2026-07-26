@@ -13,10 +13,12 @@ peerDependencyRules:
     vite: '*'
     vitest: '*'
 allowBuilds:
+  '@scarf/scarf': true
   esbuild: true
   msw: false
   puppeteer: true
 catalog:
+  '@asteasolutions/zod-to-openapi': ^9.1.0
   '@axe-core/playwright': ^4.12.1
   '@lhci/cli': ^0.15.1
   '@playwright/test': ^1.61.1
@@ -25,6 +27,7 @@ catalog:
   '@types/express': ^5.0.6
   '@types/node': ^24
   '@types/supertest': ^7.2.1
+  '@types/swagger-ui-express': ^4.1.8
   '@vitejs/plugin-vue': ^6.0.7
   '@vitest/browser-playwright': ^4.1.10
   '@vue/tsconfig': ^0.9.1
@@ -34,6 +37,7 @@ catalog:
   playwright: ^1.61.1
   size-limit: ^13.0.1
   supertest: ^7.2.2
+  swagger-ui-express: ^5.0.1
   tailwindcss: ^4.3.3
   typescript: ^6
   vite: ^6

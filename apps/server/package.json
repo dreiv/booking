@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "node --watch src/main.ts",
     "build": "vp pack",
+    "check": "vp check && knip",
     "start": "node dist/main.mjs",
     "test": "vp test"
   },
   "dependencies": {
+    "@asteasolutions/zod-to-openapi": "catalog:",
     "express": "catalog:",
     "zod": "catalog:"
   },
@@ -17,8 +19,10 @@
     "@types/express": "catalog:",
     "@types/node": "catalog:",
     "@types/supertest": "catalog:",
+    "@types/swagger-ui-express": "catalog:",
     "msw": "catalog:",
     "supertest": "catalog:",
+    "swagger-ui-express": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plus": "catalog:",
