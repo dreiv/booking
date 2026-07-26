@@ -22,14 +22,18 @@ catalog:
   '@playwright/test': ^1.61.1
   '@size-limit/preset-app': ^13.0.1
   '@tailwindcss/vite': ^4.3.3
+  '@types/express': ^5.0.6
   '@types/node': ^24
+  '@types/supertest': ^7.2.1
   '@vitejs/plugin-vue': ^6.0.7
   '@vitest/browser-playwright': ^4.1.10
   '@vue/tsconfig': ^0.9.1
+  express: ^5.2.1
   knip: ^6.29.0
   msw: ^2.15.0
   playwright: ^1.61.1
   size-limit: ^13.0.1
+  supertest: ^7.2.2
   tailwindcss: ^4.3.3
   typescript: ^6
   vite: ^6
@@ -38,3 +42,4 @@ catalog:
   vitest-browser-vue: ^2.1.0
   vue: ^3.5.39
   vue-tsc: ^3.3.5
+  zod: ^4.4.3

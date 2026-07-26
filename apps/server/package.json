@@ -9,8 +9,16 @@
     "start": "node dist/main.mjs",
     "test": "vp test"
   },
+  "dependencies": {
+    "express": "catalog:",
+    "zod": "catalog:"
+  },
   "devDependencies": {
+    "@types/express": "catalog:",
     "@types/node": "catalog:",
+    "@types/supertest": "catalog:",
+    "msw": "catalog:",
+    "supertest": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plus": "catalog:",
