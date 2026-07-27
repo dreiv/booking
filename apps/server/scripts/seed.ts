@@ -1,0 +1,29 @@
+import { db } from '../src/db/client.ts';
+import { bookings } from '../src/db/schema.ts';
+
+const seedData = [
+  {
+    guestName: 'Ada Lovelace',
+    roomType: 'suite' as const,
+    checkIn: '2026-08-01',
+    checkOut: '2026-08-05',
+  },
+  {
+    guestName: 'Alan Turing',
+    roomType: 'double' as const,
+    checkIn: '2026-08-10',
+    checkOut: '2026-08-12',
+  },
+  {
+    guestName: 'Grace Hopper',
+    roomType: 'single' as const,
+    checkIn: '2026-09-01',
+    checkOut: '2026-09-03',
+  },
+];
+
+await db.delete(bookings);
+await db.insert(bookings).values(seedData);
+
+console.log(`Seeded ${seedData.length} bookings.`);
+process.exit(0);
