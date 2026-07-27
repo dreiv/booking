@@ -1,12 +1,13 @@
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
-import { bookingsRouter } from './routes/bookings.ts';
+import type { Database } from './db/types.ts';
+import { createBookingsRouter } from './routes/bookings.ts';
 import { generateOpenApiDocument } from './openapi/registry.ts';
 
-export function createApp() {
+export function createApp(db: Database) {
   const app = express();
   app.use(express.json());
-  app.use('/api/bookings', bookingsRouter);
+  app.use('/api/bookings', createBookingsRouter(db));
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(generateOpenApiDocument()));
   return app;
 }

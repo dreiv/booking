@@ -1,8 +1,9 @@
 import { createApp } from './app.ts';
+import { db } from './db/client.ts';
+import { env } from './env.ts';
 
-const PORT = process.env.PORT || 3000;
-const app = createApp();
+const app = createApp(db);
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+app.listen(env.PORT, () => {
+  console.log(`🚀 Server running at http://localhost:${env.PORT}`);
 });

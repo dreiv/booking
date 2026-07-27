@@ -4,24 +4,31 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --watch src/main.ts",
+    "dev": "node --env-file=.env --watch src/main.ts",
     "build": "vp pack",
     "build:openapi": "node scripts/generate-openapi.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "check": "vp check && knip",
     "start": "node dist/main.mjs",
     "test": "vp test"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "catalog:",
+    "drizzle-orm": "catalog:",
     "express": "catalog:",
+    "pg": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "catalog:",
     "@types/express": "catalog:",
     "@types/node": "catalog:",
+    "@types/pg": "catalog:",
     "@types/supertest": "catalog:",
     "@types/swagger-ui-express": "catalog:",
-    "msw": "catalog:",
+    "drizzle-kit": "catalog:",
+    "drizzle-zod": "catalog:",
     "supertest": "catalog:",
     "swagger-ui-express": "catalog:",
     "typescript": "catalog:",

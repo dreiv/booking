@@ -1,37 +1,35 @@
 import { Router } from 'express';
-import { randomUUID } from 'node:crypto';
+import { eq } from 'drizzle-orm';
+import type { Database } from '../db/types.ts';
+import { bookings } from '../db/schema.ts';
 import { createBookingSchema } from '../schemas/booking.schema.ts';
-import { mockBookings } from '../data/mockBookings.ts';
 
-export const bookingsRouter = Router();
+export function createBookingsRouter(db: Database) {
+  const router = Router();
 
-bookingsRouter.get('/', (_req, res) => {
-  res.json({ data: mockBookings });
-});
+  router.get('/', async (_req, res) => {
+    const data = await db.select().from(bookings);
+    res.json({ data });
+  });
 
-bookingsRouter.get('/:id', (req, res) => {
-  const booking = mockBookings.find((b) => b.id === req.params.id);
-  if (!booking) {
-    res.status(404).json({ error: `Booking '${req.params.id}' not found` });
-    return;
-  }
-  res.json(booking);
-});
+  router.get('/:id', async (req, res) => {
+    const [booking] = await db.select().from(bookings).where(eq(bookings.id, req.params.id));
+    if (!booking) {
+      res.status(404).json({ error: `Booking '${req.params.id}' not found` });
+      return;
+    }
+    res.json(booking);
+  });
 
-bookingsRouter.post('/', (req, res) => {
-  const result = createBookingSchema.safeParse(req.body);
-  if (!result.success) {
-    res.status(400).json({ error: result.error.flatten() });
-    return;
-  }
+  router.post('/', async (req, res) => {
+    const result = createBookingSchema.safeParse(req.body);
+    if (!result.success) {
+      res.status(400).json({ error: result.error.flatten() });
+      return;
+    }
+    const [newBooking] = await db.insert(bookings).values(result.data).returning();
+    res.status(201).json(newBooking);
+  });
 
-  const newBooking = {
-    id: `bkg-${randomUUID()}`,
-    ...result.data,
-    status: 'pending' as const,
-    createdAt: new Date().toISOString(),
-  };
-
-  mockBookings.push(newBooking);
-  res.status(201).json(newBooking);
-});
+  return router;
+}

@@ -2,8 +2,14 @@ import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app.ts';
 import { bookingSchema } from '../src/schemas/booking.schema.ts';
+import { beforeEach } from 'vitest';
+import { createTestDb } from './testDb.ts';
 
-const app = createApp();
+let app: ReturnType<typeof createApp>;
+
+beforeEach(async () => {
+  app = createApp(await createTestDb());
+});
 
 describe('Bookings API contract', () => {
   it('GET /api/bookings response items conform to bookingSchema', async () => {

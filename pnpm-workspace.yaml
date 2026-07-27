@@ -20,31 +20,37 @@ allowBuilds:
 catalog:
   '@asteasolutions/zod-to-openapi': ^9.1.0
   '@axe-core/playwright': ^4.12.1
+  '@electric-sql/pglite': ^0.3.11
   '@lhci/cli': ^0.15.1
   '@playwright/test': ^1.61.1
   '@size-limit/preset-app': ^13.0.1
   '@tailwindcss/vite': ^4.3.3
   '@types/express': ^5.0.6
   '@types/node': ^24
+  '@types/pg': ^8.15.6
   '@types/supertest': ^7.2.1
   '@types/swagger-ui-express': ^4.1.8
   '@vitejs/plugin-vue': ^6.0.7
   '@vitest/browser-playwright': ^4.1.10
   '@vue/tsconfig': ^0.9.1
+  drizzle-kit: ^0.31.6
+  drizzle-orm: ^0.44.6
+  drizzle-zod: ^0.8.3
   express: ^5.2.1
   knip: ^6.29.0
   msw: ^2.15.0
   openapi-typescript: ^7.13.0
+  pg: ^8.16.3
   playwright: ^1.61.1
   size-limit: ^13.0.1
   supertest: ^7.2.2
   swagger-ui-express: ^5.0.1
   tailwindcss: ^4.3.3
   typescript: ^6
-  vite: ^6
   vite-plus: latest
-  vitest: ^4.1.10
+  vite: ^6
   vitest-browser-vue: ^2.1.0
-  vue: ^3.5.39
+  vitest: ^4.1.10
   vue-tsc: ^3.3.5
+  vue: ^3.5.39
   zod: ^4.4.3
