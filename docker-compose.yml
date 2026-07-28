@@ -1,13 +1,29 @@
 services:
   postgres:
     image: postgres:17-alpine
+    container_name: booking_postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: booking
-      POSTGRES_PASSWORD: booking
-      POSTGRES_DB: booking
+      POSTGRES_USER: ${POSTGRES_USER:-booking}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-booking}
+      POSTGRES_DB: ${POSTGRES_DB:-booking}
     ports:
       - '5432:5432'
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER:-booking} -d $${POSTGRES_DB:-booking}']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.57
+    container_name: booking_jaeger
+    restart: unless-stopped
+    ports:
+      - '16686:16686' # UI
+      - '4318:4318' # OTLP HTTP receiver
+
 volumes:
   postgres-data:

@@ -2,37 +2,48 @@
 logs
 *.log
 npm-debug.log*
+pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
+# Dependencies
 node_modules/
+
+# Build & Cache Output
+dist/
+dist-ssr/
+.vite/
+.cache/
+*.tsbuildinfo
+
+# Testing & Coverage
+coverage/
 test-results/
 playwright-report/
 blob-report/
 playwright/.cache/
 playwright/.auth/
-dist
-dist-ssr
-*.local
-.lighthouseci
+.lighthouseci/
 
-# Environment Variables
+# Environment Variables & Local Configs
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*.local
+*.local
 
-# Editor directories and files
+# Database / Local Uploads (Express Backend)
+*.sqlite
+*.db
+uploads/
+
+# Editor & OS Files
+.DS_Store
+Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-
