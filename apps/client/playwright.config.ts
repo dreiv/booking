@@ -11,7 +11,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   ignoreSnapshots: process.env.CI ? false : undefined,
-  expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.05, threshold: 0.2 } },
+  expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.01 } },
   use: {
     baseURL: process.env.CI ? 'http://localhost:4173' : 'http://localhost:5173',
     trace: 'on-first-retry',

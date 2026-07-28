@@ -24,18 +24,27 @@ test.describe('Client App - E2E Suite', () => {
     });
   });
 
-  test('loads successfully, passes a11y audit, and matches visual baseline', async ({ page }) => {
+  test('loads successfully and displays bookings', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText('Playwright Guest')).toBeVisible();
+  });
+
+  test('passes accessibility audit', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('Playwright Guest')).toBeVisible();
+
     const accessibilityScanResults = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'])
       .analyze();
 
     expect(accessibilityScanResults.violations).toEqual([]);
+  });
 
-    await expect(page).toHaveScreenshot('homepage-baseline.png', {
-      maxDiffPixelRatio: 0.05,
-    });
+  test('matches visual baseline', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('Playwright Guest')).toBeVisible();
+
+    await expect(page).toHaveScreenshot('homepage-baseline.png');
   });
 
   test('handles server error response', async ({ page }) => {
