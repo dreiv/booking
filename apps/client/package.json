@@ -29,6 +29,7 @@
     "@vitejs/plugin-vue": "catalog:",
     "@vitest/browser-playwright": "catalog:",
     "@vue/tsconfig": "catalog:",
+    "axe-core": "catalog:",
     "knip": "catalog:",
     "msw": "catalog:",
     "playwright": "catalog:",

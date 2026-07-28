@@ -51,6 +51,9 @@ catalogs:
     '@vue/tsconfig':
       specifier: ^0.9.1
       version: 0.9.1
+    axe-core:
+      specifier: ^4.12.1
+      version: 4.12.1
     drizzle-kit:
       specifier: ^0.31.6
       version: 0.31.10
@@ -160,6 +163,9 @@ importers:
       '@vue/tsconfig':
         specifier: 'catalog:'
         version: 0.9.1(typescript@6.0.3)(vue@3.5.40(typescript@6.0.3))
+      axe-core:
+        specifier: 'catalog:'
+        version: 4.12.1
       knip:
         specifier: 'catalog:'
         version: 6.29.0
