@@ -3,11 +3,12 @@ import request from 'supertest';
 import { createApp } from '../src/app.ts';
 import { beforeEach } from 'vitest';
 import { createTestDb } from './testDb.ts';
+import { createCorsOptions } from '../src/corsOptions.ts';
 
 let app: ReturnType<typeof createApp>;
 
 beforeEach(async () => {
-  app = createApp(await createTestDb());
+  app = createApp(await createTestDb(), createCorsOptions(['http://localhost:3000']));
 });
 
 describe('Bookings API', () => {

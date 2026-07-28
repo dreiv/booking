@@ -62,3 +62,5 @@ catalog:
   '@opentelemetry/resources': ^2.10.0
   '@opentelemetry/semantic-conventions': ^1.43.0
   '@opentelemetry/exporter-trace-otlp-http': ^0.221.0
+  cors: ^2.8.6
+  '@types/cors': ^2.8.19

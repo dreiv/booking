@@ -21,6 +21,7 @@
     "@opentelemetry/resources": "catalog:",
     "@opentelemetry/sdk-node": "catalog:",
     "@opentelemetry/semantic-conventions": "catalog:",
+    "cors": "catalog:",
     "drizzle-orm": "catalog:",
     "express": "catalog:",
     "pg": "catalog:",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "catalog:",
+    "@types/cors": "catalog:",
     "@types/express": "catalog:",
     "@types/node": "catalog:",
     "@types/pg": "catalog:",

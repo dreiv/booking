@@ -7,13 +7,13 @@ try {
   if (!isMissingFile) {
     throw err;
   }
-  // No .env file present — assume the host (Render, Neon, CI, etc.)
-  // injects environment variables directly into process.env instead.
 }
 
 const envSchema = z.object({
   DATABASE_URL: z.string().url(),
   PORT: z.coerce.number().default(3000),
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  CORS_ALLOWED_ORIGINS: z.string().optional(),
 });
 
 export const env = envSchema.parse(process.env);

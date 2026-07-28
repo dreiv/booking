@@ -4,13 +4,13 @@ import { createApp } from '../src/app.ts';
 import { bookingSchema } from 'utils/booking-schema';
 import { beforeEach } from 'vitest';
 import { createTestDb } from './testDb.ts';
+import { createCorsOptions } from '../src/corsOptions.ts';
 
 let app: ReturnType<typeof createApp>;
 
 beforeEach(async () => {
-  app = createApp(await createTestDb());
+  app = createApp(await createTestDb(), createCorsOptions(['http://localhost:3000']));
 });
-
 describe('Bookings API contract', () => {
   it('GET /api/bookings response items conform to bookingSchema', async () => {
     const response = await request(app).get('/api/bookings');
