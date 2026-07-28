@@ -1,21 +1,22 @@
-import { z } from 'zod';
+import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import { z } from 'zod';
+import { bookings } from '../db/schema.ts';
 
 extendZodWithOpenApi(z);
 
-export const bookingSchema = z
-  .object({
-    id: z.string(),
-    guestName: z.string().min(1),
-    roomType: z.enum(['single', 'double', 'suite']),
-    checkIn: z.string().date(),
-    checkOut: z.string().date(),
-    status: z.enum(['pending', 'confirmed', 'cancelled']),
-    createdAt: z.string().datetime(),
-  })
+export const bookingSchema = createSelectSchema(bookings, {
+  checkIn: (schema) => schema.date(),
+  checkOut: (schema) => schema.date(),
+  createdAt: z.string().datetime(),
+})
   .strict()
   .openapi('Booking');
 
-export const createBookingSchema = bookingSchema
-  .omit({ id: true, status: true, createdAt: true })
+export const createBookingSchema = createInsertSchema(bookings, {
+  checkIn: (schema) => schema.date(),
+  checkOut: (schema) => schema.date(),
+})
+  .pick({ guestName: true, roomType: true, checkIn: true, checkOut: true })
+  .strict()
   .openapi('CreateBookingInput');

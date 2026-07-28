@@ -30,6 +30,7 @@
     "@types/swagger-ui-express": "catalog:",
     "drizzle-kit": "catalog:",
     "drizzle-zod": "catalog:",
+    "knip": "catalog:",
     "supertest": "catalog:",
     "swagger-ui-express": "catalog:",
     "typescript": "catalog:",

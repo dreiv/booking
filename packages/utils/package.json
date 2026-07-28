@@ -4,21 +4,17 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./dist/index.mjs",
+    "./api-types": "./src/api-types.d.ts",
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "vp pack",
     "build:types": "openapi-typescript ../../apps/server/openapi.json -o ./src/api-types.d.ts",
-    "dev": "vp pack --watch",
-    "test": "vp test",
     "check": "vp check"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "openapi-typescript": "catalog:",
     "typescript": "catalog:",
-    "vite-plus": "catalog:",
-    "vitest": "catalog:"
+    "vite-plus": "catalog:"
   }
 }
