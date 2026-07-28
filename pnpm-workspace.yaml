@@ -16,6 +16,7 @@ allowBuilds:
   '@scarf/scarf': true
   esbuild: true
   msw: false
+  protobufjs: true
   puppeteer: true
 catalog:
   '@asteasolutions/zod-to-openapi': ^9.1.0
@@ -55,3 +56,10 @@ catalog:
   vue: ^3.5.39
   zod: ^4.4.3
   axe-core: ^4.12.1
+  '@opentelemetry/api': ^1.9.1
+  '@opentelemetry/sdk-node': ^0.221.0
+  '@opentelemetry/auto-instrumentations-node': ^0.79.0
+  '@opentelemetry/sdk-trace-node': ^2.10.0
+  '@opentelemetry/resources': ^2.10.0
+  '@opentelemetry/semantic-conventions': ^1.43.0
+  '@opentelemetry/exporter-trace-otlp-http': ^0.221.0

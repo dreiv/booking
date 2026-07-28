@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --watch src/main.ts",
+    "dev": "node --import ./src/instrumentation.ts --watch src/main.ts",
     "build": "vp pack",
     "build:openapi": "node scripts/generate-openapi.ts",
     "db:generate": "drizzle-kit generate",
@@ -16,9 +16,17 @@
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "catalog:",
+    "@opentelemetry/api": "catalog:",
+    "@opentelemetry/auto-instrumentations-node": "catalog:",
+    "@opentelemetry/exporter-trace-otlp-http": "catalog:",
+    "@opentelemetry/resources": "catalog:",
+    "@opentelemetry/sdk-node": "catalog:",
+    "@opentelemetry/semantic-conventions": "catalog:",
     "drizzle-orm": "catalog:",
+    "drizzle-zod": "catalog:",
     "express": "catalog:",
     "pg": "catalog:",
+    "swagger-ui-express": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -29,10 +37,8 @@
     "@types/supertest": "catalog:",
     "@types/swagger-ui-express": "catalog:",
     "drizzle-kit": "catalog:",
-    "drizzle-zod": "catalog:",
     "knip": "catalog:",
     "supertest": "catalog:",
-    "swagger-ui-express": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plus": "catalog:",
