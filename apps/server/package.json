@@ -23,10 +23,10 @@
     "@opentelemetry/sdk-node": "catalog:",
     "@opentelemetry/semantic-conventions": "catalog:",
     "drizzle-orm": "catalog:",
-    "drizzle-zod": "catalog:",
     "express": "catalog:",
     "pg": "catalog:",
     "swagger-ui-express": "catalog:",
+    "utils": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {

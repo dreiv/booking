@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { eq } from 'drizzle-orm';
 import type { Database } from '../db/types.ts';
-import { bookings } from '../db/schema.ts';
-import { createBookingSchema } from '../schemas/booking.schema.ts';
+import { bookings } from 'utils/db-schema';
+import { createBookingSchema } from 'utils/booking-schema';
 
 export function createBookingsRouter(db: Database) {
   const router = Router();

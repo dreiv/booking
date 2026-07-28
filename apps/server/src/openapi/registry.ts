@@ -1,6 +1,6 @@
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
-import { bookingSchema, createBookingSchema } from '../schemas/booking.schema.ts';
+import { bookingSchema, createBookingSchema } from 'utils/booking-schema';
 
 const registry = new OpenAPIRegistry();
 

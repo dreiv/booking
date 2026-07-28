@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { fetchBookings } from './api/bookings.ts';
-import type { components } from 'utils/api-types';
-
-type Booking = components['schemas']['Booking'];
+import type { Booking } from './api/bookings.ts';
 
 const bookings = ref<Booking[]>([]);
 const error = ref<string | null>(null);

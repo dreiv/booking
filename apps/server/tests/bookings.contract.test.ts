@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app.ts';
-import { bookingSchema } from '../src/schemas/booking.schema.ts';
+import { bookingSchema } from 'utils/booking-schema';
 import { beforeEach } from 'vitest';
 import { createTestDb } from './testDb.ts';
 

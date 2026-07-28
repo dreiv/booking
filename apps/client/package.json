@@ -17,7 +17,9 @@
     "lhci": "lhci autorun"
   },
   "dependencies": {
-    "vue": "catalog:"
+    "utils": "workspace:*",
+    "vue": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@axe-core/playwright": "catalog:",
@@ -36,7 +38,6 @@
     "size-limit": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
-    "utils": "workspace:*",
     "vite": "catalog:",
     "vite-plus": "catalog:",
     "vitest": "catalog:",
