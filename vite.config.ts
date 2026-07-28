@@ -8,7 +8,4 @@ export default defineConfig({
   fmt: { singleQuote: true },
   lint: { options: { typeAware: true, typeCheck: true } },
   run: { cache: true },
-  test: {
-    include: ['src/**/*.test.ts', 'tests/**/*.test.ts'],
-  },
 });

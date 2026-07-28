@@ -24,6 +24,10 @@ pnpm services:up
 
 ```
 
+(`pnpm services:up` is just a wrapper around `docker compose up -d` — if you're running
+Docker from a shell without Node/pnpm on it, e.g. a separate WSL distro, run
+`docker compose up -d` directly instead.)
+
 Create `apps/server/.env` (gitignored):
 
 ```
@@ -71,6 +75,15 @@ pnpm services:down   # Stop containers
 pnpm services:logs   # Tail logs for background services
 
 ```
+
+These are thin wrappers with no logic of their own — if Node/pnpm isn't available in
+the shell you're using for Docker (e.g. a separate WSL distro), call Compose directly:
+
+| pnpm script          | Direct equivalent        |
+| -------------------- | ------------------------ |
+| `pnpm services:up`   | `docker compose up -d`   |
+| `pnpm services:down` | `docker compose down`    |
+| `pnpm services:logs` | `docker compose logs -f` |
 
 - **PostgreSQL:** Running on `localhost:5432`
 - **Jaeger UI:** `http://localhost:16686` — OpenTelemetry trace dashboard (select `booking-server` service)
