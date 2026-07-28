@@ -1,6 +1,6 @@
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
-import { bookingSchema, createBookingSchema } from 'utils/booking-schema';
+import { bookingSchema, createBookingSchema, bookingIdParamSchema } from 'utils/booking-schema';
 
 const registry = new OpenAPIRegistry();
 
@@ -20,9 +20,10 @@ registry.registerPath({
   method: 'get',
   path: '/api/bookings/{id}',
   summary: 'Get a booking by id',
-  request: { params: z.object({ id: z.string() }) },
+  request: { params: z.object({ id: bookingIdParamSchema }) },
   responses: {
     200: { description: 'The booking', content: { 'application/json': { schema: bookingSchema } } },
+    400: { description: 'Invalid identifier format' },
     404: { description: 'Not found' },
   },
 });

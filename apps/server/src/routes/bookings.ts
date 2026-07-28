@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { eq } from 'drizzle-orm';
 import type { Database } from '../db/types.ts';
 import { bookings } from 'utils/db-schema';
-import { createBookingSchema } from 'utils/booking-schema';
+import { createBookingSchema, bookingIdParamSchema } from 'utils/booking-schema';
 
 export function createBookingsRouter(db: Database) {
   const router = Router();
@@ -13,7 +13,13 @@ export function createBookingsRouter(db: Database) {
   });
 
   router.get('/:id', async (req, res) => {
-    const [booking] = await db.select().from(bookings).where(eq(bookings.id, req.params.id));
+    const idResult = bookingIdParamSchema.safeParse(req.params.id);
+    if (!idResult.success) {
+      res.status(400).json({ error: 'Invalid identifier format' });
+      return;
+    }
+
+    const [booking] = await db.select().from(bookings).where(eq(bookings.id, idResult.data));
     if (!booking) {
       res.status(404).json({ error: `Booking '${req.params.id}' not found` });
       return;

@@ -10,11 +10,11 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "guestName": {
-            "type": "string",
-            "minLength": 1
+            "type": "string"
           },
           "roomType": {
             "type": "string",
@@ -44,8 +44,7 @@
         "type": "object",
         "properties": {
           "guestName": {
-            "type": "string",
-            "minLength": 1
+            "type": "string"
           },
           "roomType": {
             "type": "string",
@@ -126,7 +125,8 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             },
             "required": true,
             "name": "id",
@@ -143,6 +143,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Invalid identifier format"
           },
           "404": {
             "description": "Not found"

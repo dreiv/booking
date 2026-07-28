@@ -20,3 +20,5 @@ export const createBookingSchema = createInsertSchema(bookings, {
   .pick({ guestName: true, roomType: true, checkIn: true, checkOut: true })
   .strict()
   .openapi('CreateBookingInput');
+
+export const bookingIdParamSchema = z.string().uuid();
