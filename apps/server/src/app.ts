@@ -7,6 +7,7 @@ import { generateOpenApiDocument } from './openapi/registry.ts';
 export function createApp(db: Database) {
   const app = express();
   app.use(express.json());
+  app.get('/health', (_req, res) => res.status(200).json({ status: 'ok' }));
   app.use('/api/bookings', createBookingsRouter(db));
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(generateOpenApiDocument()));
   return app;

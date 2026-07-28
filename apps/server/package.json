@@ -4,12 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --env-file=.env --watch src/main.ts",
+    "dev": "node --watch src/main.ts",
     "build": "vp pack",
     "build:openapi": "node scripts/generate-openapi.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:seed": "node --env-file=.env scripts/seed.ts",
+    "db:seed": "node scripts/seed.ts",
     "check": "vp check && knip",
     "start": "node dist/main.mjs",
     "test": "vp test"

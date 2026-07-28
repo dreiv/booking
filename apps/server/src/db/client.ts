@@ -3,5 +3,8 @@ import { Pool } from 'pg';
 import { env } from '../env.ts';
 import { schema } from './schema.ts';
 
-const pool = new Pool({ connectionString: env.DATABASE_URL });
+const pool = new Pool({
+  connectionString: env.DATABASE_URL,
+  ssl: env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false },
+});
 export const db = drizzle(pool, { schema });
