@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "node --import ./src/instrumentation.ts --watch src/main.ts",
     "build": "vp pack",
-    "build:openapi": "node scripts/generate-openapi.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "node scripts/seed.ts",
