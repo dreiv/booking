@@ -31,6 +31,6 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
     return;
   }
 
-  console.error(err);
+  req.log.error({ err }, 'Unhandled request error');
   sendProblem(res, 500, 'Internal server error', req.originalUrl);
 }

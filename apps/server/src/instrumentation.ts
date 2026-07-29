@@ -3,6 +3,7 @@ import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentation
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import { ATTR_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
+import { logger } from './logger.ts';
 
 try {
   process.loadEnvFile('.env');
@@ -28,5 +29,5 @@ if (otlpEndpoint) {
     void sdk.shutdown().finally(() => process.exit(0));
   });
 } else {
-  console.log('OTEL_EXPORTER_OTLP_ENDPOINT not set — skipping OpenTelemetry instrumentation.');
+  logger.info('OTEL_EXPORTER_OTLP_ENDPOINT not set — skipping OpenTelemetry instrumentation.');
 }

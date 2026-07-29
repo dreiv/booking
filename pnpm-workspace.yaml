@@ -65,3 +65,5 @@ catalog:
   cors: ^2.8.6
   '@types/cors': ^2.8.19
   express-rate-limit: ^8.6.1
+  pino: ^10.3.1
+  pino-http: ^11.0.0

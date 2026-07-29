@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import { createHash } from 'node:crypto';
 import { eq } from 'drizzle-orm';
+import type { Logger } from 'pino';
 import type { Database } from '../db/types.ts';
 import { idempotencyKeys } from 'utils/db-schema';
 import { idempotencyKeySchema } from 'utils/idempotency-schema';
@@ -24,7 +25,13 @@ function hashRequestBody(body: unknown): string {
     .digest('hex');
 }
 
-async function persistResponse(db: Database, key: string, status: number, body: unknown) {
+async function persistResponse(
+  db: Database,
+  log: Logger,
+  key: string,
+  status: number,
+  body: unknown,
+) {
   try {
     if (status >= 200 && status < 300) {
       await db
@@ -36,7 +43,7 @@ async function persistResponse(db: Database, key: string, status: number, body: 
       await db.delete(idempotencyKeys).where(eq(idempotencyKeys.key, key));
     }
   } catch (err) {
-    console.error('Failed to persist idempotency record', err);
+    log.error({ err, key }, 'Failed to persist idempotency record');
   }
 }
 
@@ -110,7 +117,7 @@ export function createIdempotencyMiddleware(db: Database) {
 
     const originalJson = res.json.bind(res);
     res.json = ((body?: unknown) => {
-      void persistResponse(db, key, res.statusCode, body);
+      void persistResponse(db, req.log, key, res.statusCode, body);
       return originalJson(body);
     }) as Response['json'];
 

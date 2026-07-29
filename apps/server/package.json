@@ -27,6 +27,8 @@
     "express": "catalog:",
     "express-rate-limit": "catalog:",
     "pg": "catalog:",
+    "pino": "catalog:",
+    "pino-http": "catalog:",
     "swagger-ui-express": "catalog:",
     "utils": "workspace:*",
     "zod": "catalog:"

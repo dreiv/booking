@@ -2,14 +2,17 @@ import express from 'express';
 import cors from 'cors';
 import type { CorsOptions } from 'cors';
 import swaggerUi from 'swagger-ui-express';
+import pinoHttp from 'pino-http';
 import type { Database } from './db/types.ts';
 import { createBookingsRouter } from './routes/bookings.ts';
 import { generateOpenApiDocument } from './openapi/registry.ts';
 import { errorHandler } from './middleware/errorHandler.ts';
+import { logger } from './logger.ts';
 
 export function createApp(db: Database, corsOptions: CorsOptions, trustProxy = false) {
   const app = express();
   if (trustProxy) app.set('trust proxy', 1);
+  app.use(pinoHttp({ logger }));
   app.use(cors(corsOptions));
   app.use(express.json());
   app.get('/health', (_req, res) => res.status(200).json({ status: 'ok' }));
