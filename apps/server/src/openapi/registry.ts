@@ -1,6 +1,12 @@
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
-import { bookingSchema, createBookingSchema, bookingIdParamSchema } from 'utils/booking-schema';
+import {
+  bookingSchema,
+  createBookingSchema,
+  bookingIdParamSchema,
+  bookingQuerySchema,
+  paginatedBookingsSchema,
+} from 'utils/booking-schema';
 import { problemDetailsSchema } from 'utils/problem-details-schema';
 
 const registry = new OpenAPIRegistry();
@@ -15,12 +21,14 @@ function problemResponse(description: string) {
 registry.registerPath({
   method: 'get',
   path: '/api/bookings',
-  summary: 'List all bookings',
+  summary: 'List bookings with optional search, filters, sorting, and pagination',
+  request: { query: bookingQuerySchema },
   responses: {
     200: {
-      description: 'A list of bookings',
-      content: { 'application/json': { schema: z.object({ data: z.array(bookingSchema) }) } },
+      description: 'A page of bookings',
+      content: { 'application/json': { schema: paginatedBookingsSchema } },
     },
+    400: problemResponse('Invalid or excessive query parameters'),
     429: problemResponse('Too many requests'),
   },
 });
