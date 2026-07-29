@@ -44,6 +44,19 @@ pnpm --filter server run db:seed
 
 ```
 
+## Environment variables
+
+Server (`apps/server/.env`, see `apps/server/.env.example`):
+
+| Variable                      | Required           | Default          | Notes                                                                                                                                                                                                                                                              |
+| ----------------------------- | ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `DATABASE_URL`                | Yes                | —                | Postgres connection string. Must be a valid URL.                                                                                                                                                                                                                   |
+| `PORT`                        | No                 | `3000`           | Port the server listens on.                                                                                                                                                                                                                                        |
+| `NODE_ENV`                    | No                 | `development`    | One of `development`, `production`, `test`.                                                                                                                                                                                                                        |
+| `CORS_ALLOWED_ORIGINS`        | Only in production | local dev origin | Comma-separated list of allowed origins. The server refuses to start in production without this set.                                                                                                                                                               |
+| `TRUST_PROXY`                 | No                 | `false`          | Set to `true` only if the server sits behind exactly one reverse proxy (Fly.io, Render, Heroku, a single nginx hop). Enabling this when there isn't a trusted proxy in front of you lets clients spoof their IP via `X-Forwarded-For`, which breaks rate limiting. |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | No                 | unset            | OpenTelemetry collector endpoint. When unset, tracing instrumentation is skipped entirely.                                                                                                                                                                         |
+
 ## Running the project
 
 Start everything (client + server) in parallel from the root:

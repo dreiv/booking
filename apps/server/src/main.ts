@@ -6,7 +6,7 @@ import { resolveAllowedOrigins, createCorsOptions } from './corsOptions.ts';
 const allowedOrigins = resolveAllowedOrigins(env.CORS_ALLOWED_ORIGINS, env.NODE_ENV);
 const corsOptions = createCorsOptions(allowedOrigins);
 
-const app = createApp(db, corsOptions);
+const app = createApp(db, corsOptions, env.TRUST_PROXY);
 
 app.listen(env.PORT, () => {
   console.log(`🚀 Server running at http://localhost:${env.PORT}`);

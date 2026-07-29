@@ -13,6 +13,7 @@ registry.registerPath({
       description: 'A list of bookings',
       content: { 'application/json': { schema: z.object({ data: z.array(bookingSchema) }) } },
     },
+    429: { description: 'Too many requests' },
   },
 });
 
@@ -25,6 +26,7 @@ registry.registerPath({
     200: { description: 'The booking', content: { 'application/json': { schema: bookingSchema } } },
     400: { description: 'Invalid identifier format' },
     404: { description: 'Not found' },
+    429: { description: 'Too many requests' },
   },
 });
 
@@ -48,6 +50,7 @@ registry.registerPath({
       description:
         'Idempotency-Key reused with a different payload, or a duplicate request is already in flight',
     },
+    429: { description: 'Too many requests' },
   },
 });
 

@@ -7,8 +7,9 @@ import { createBookingsRouter } from './routes/bookings.ts';
 import { generateOpenApiDocument } from './openapi/registry.ts';
 import { errorHandler } from './middleware/errorHandler.ts';
 
-export function createApp(db: Database, corsOptions: CorsOptions) {
+export function createApp(db: Database, corsOptions: CorsOptions, trustProxy = false) {
   const app = express();
+  if (trustProxy) app.set('trust proxy', 1);
   app.use(cors(corsOptions));
   app.use(express.json());
   app.get('/health', (_req, res) => res.status(200).json({ status: 'ok' }));

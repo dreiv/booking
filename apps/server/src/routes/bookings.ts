@@ -4,17 +4,18 @@ import type { Database } from '../db/types.ts';
 import { bookings } from 'utils/db-schema';
 import { createBookingSchema, bookingIdParamSchema } from 'utils/booking-schema';
 import { createIdempotencyMiddleware } from '../middleware/idempotency.ts';
+import { readLimiter, writeLimiter } from '../middleware/rateLimiter.ts';
 
 export function createBookingsRouter(db: Database) {
   const router = Router();
   const idempotency = createIdempotencyMiddleware(db);
 
-  router.get('/', async (_req, res) => {
+  router.get('/', readLimiter, async (_req, res) => {
     const data = await db.select().from(bookings);
     res.json({ data });
   });
 
-  router.get('/:id', async (req, res) => {
+  router.get('/:id', readLimiter, async (req, res) => {
     const idResult = bookingIdParamSchema.safeParse(req.params.id);
     if (!idResult.success) {
       res.status(400).json({ error: 'Invalid identifier format' });
@@ -29,7 +30,7 @@ export function createBookingsRouter(db: Database) {
     res.json(booking);
   });
 
-  router.post('/', idempotency, async (req, res) => {
+  router.post('/', writeLimiter, idempotency, async (req, res) => {
     const result = createBookingSchema.safeParse(req.body);
     if (!result.success) {
       res.status(400).json({ error: result.error.flatten() });

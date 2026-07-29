@@ -25,6 +25,7 @@
     "cors": "catalog:",
     "drizzle-orm": "catalog:",
     "express": "catalog:",
+    "express-rate-limit": "catalog:",
     "pg": "catalog:",
     "swagger-ui-express": "catalog:",
     "utils": "workspace:*",
