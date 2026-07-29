@@ -4,6 +4,7 @@ import { eq } from 'drizzle-orm';
 import type { Database } from '../db/types.ts';
 import { idempotencyKeys } from 'utils/db-schema';
 import { idempotencyKeySchema } from 'utils/idempotency-schema';
+import { sendProblem } from '../utils/problemDetails.ts';
 
 const IDEMPOTENCY_KEY_TTL_MS = 24 * 60 * 60 * 1000; // 24h
 
@@ -49,7 +50,7 @@ export function createIdempotencyMiddleware(db: Database) {
 
     const keyResult = idempotencyKeySchema.safeParse(rawKey);
     if (!keyResult.success) {
-      res.status(400).json({ error: 'Invalid Idempotency-Key header' });
+      sendProblem(res, 400, 'Invalid Idempotency-Key header', req.originalUrl);
       return;
     }
     const key = keyResult.data;
@@ -61,9 +62,12 @@ export function createIdempotencyMiddleware(db: Database) {
       const isExpired = Date.now() - existing.createdAt.getTime() > IDEMPOTENCY_KEY_TTL_MS;
 
       if (!isExpired && existing.requestHash !== requestHash) {
-        res.status(409).json({
-          error: 'Idempotency-Key was already used with a different request payload',
-        });
+        sendProblem(
+          res,
+          409,
+          'Idempotency-Key was already used with a different request payload',
+          req.originalUrl,
+        );
         return;
       }
 
@@ -75,9 +79,12 @@ export function createIdempotencyMiddleware(db: Database) {
 
       if (!isExpired) {
         // Same key, same payload, but the original request hasn't finished yet.
-        res.status(409).json({
-          error: 'A request with this Idempotency-Key is already being processed',
-        });
+        sendProblem(
+          res,
+          409,
+          'A request with this Idempotency-Key is already being processed',
+          req.originalUrl,
+        );
         return;
       }
 
@@ -89,9 +96,12 @@ export function createIdempotencyMiddleware(db: Database) {
       await db.insert(idempotencyKeys).values({ key, requestPath: req.originalUrl, requestHash });
     } catch (err) {
       if (isUniqueViolation(err)) {
-        res.status(409).json({
-          error: 'A request with this Idempotency-Key is already being processed',
-        });
+        sendProblem(
+          res,
+          409,
+          'A request with this Idempotency-Key is already being processed',
+          req.originalUrl,
+        );
         return;
       }
       next(err);

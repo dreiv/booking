@@ -2,6 +2,7 @@ import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app.ts';
 import { bookingSchema } from 'utils/booking-schema';
+import { problemDetailsSchema } from 'utils/problem-details-schema';
 import { createTestDb, resetTestDb } from './testDb.ts';
 import { createCorsOptions } from '../src/corsOptions.ts';
 import type { Database } from '../src/db/types.ts';
@@ -37,6 +38,28 @@ describe('Bookings API contract', () => {
     });
 
     const result = bookingSchema.safeParse(response.body);
+    expect(result.success).toBe(true);
+  });
+
+  it('GET /api/bookings/:id with a malformed id conforms to problemDetailsSchema', async () => {
+    const response = await request(app).get('/api/bookings/not-a-uuid');
+
+    expect(response.headers['content-type']).toMatch(/application\/problem\+json/);
+    const result = problemDetailsSchema.safeParse(response.body);
+    expect(result.success).toBe(true);
+  });
+
+  it('GET /api/bookings/:id with a nonexistent id conforms to problemDetailsSchema', async () => {
+    const response = await request(app).get('/api/bookings/00000000-0000-0000-0000-000000000000');
+
+    const result = problemDetailsSchema.safeParse(response.body);
+    expect(result.success).toBe(true);
+  });
+
+  it('POST /api/bookings with an invalid payload conforms to problemDetailsSchema', async () => {
+    const response = await request(app).post('/api/bookings').send({});
+
+    const result = problemDetailsSchema.safeParse(response.body);
     expect(result.success).toBe(true);
   });
 });

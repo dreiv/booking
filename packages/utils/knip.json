@@ -3,7 +3,8 @@
   "entry": [
     "src/db/schema.ts",
     "src/schemas/booking.schema.ts",
-    "src/schemas/idempotency.schema.ts"
+    "src/schemas/idempotency.schema.ts",
+    "src/schemas/problemDetails.schema.ts"
   ],
   "project": ["src/**/*.ts", "tests/**/*.ts"]
 }

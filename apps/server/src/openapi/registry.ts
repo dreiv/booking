@@ -1,8 +1,16 @@
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
 import { bookingSchema, createBookingSchema, bookingIdParamSchema } from 'utils/booking-schema';
+import { problemDetailsSchema } from 'utils/problem-details-schema';
 
 const registry = new OpenAPIRegistry();
+
+function problemResponse(description: string) {
+  return {
+    description,
+    content: { 'application/problem+json': { schema: problemDetailsSchema } },
+  };
+}
 
 registry.registerPath({
   method: 'get',
@@ -13,7 +21,7 @@ registry.registerPath({
       description: 'A list of bookings',
       content: { 'application/json': { schema: z.object({ data: z.array(bookingSchema) }) } },
     },
-    429: { description: 'Too many requests' },
+    429: problemResponse('Too many requests'),
   },
 });
 
@@ -24,9 +32,9 @@ registry.registerPath({
   request: { params: z.object({ id: bookingIdParamSchema }) },
   responses: {
     200: { description: 'The booking', content: { 'application/json': { schema: bookingSchema } } },
-    400: { description: 'Invalid identifier format' },
-    404: { description: 'Not found' },
-    429: { description: 'Too many requests' },
+    400: problemResponse('Invalid identifier format'),
+    404: problemResponse('Not found'),
+    429: problemResponse('Too many requests'),
   },
 });
 
@@ -45,12 +53,11 @@ registry.registerPath({
   },
   responses: {
     201: { description: 'Created', content: { 'application/json': { schema: bookingSchema } } },
-    400: { description: 'Invalid payload' },
-    409: {
-      description:
-        'Idempotency-Key reused with a different payload, or a duplicate request is already in flight',
-    },
-    429: { description: 'Too many requests' },
+    400: problemResponse('Invalid payload'),
+    409: problemResponse(
+      'Idempotency-Key reused with a different payload, or a duplicate request is already in flight',
+    ),
+    429: problemResponse('Too many requests'),
   },
 });
 

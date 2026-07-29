@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
+import { sendProblem } from '../utils/problemDetails.ts';
 
 interface PgError {
   code?: string;
@@ -18,7 +19,7 @@ function getPgErrorCode(err: unknown): string | undefined {
   return undefined;
 }
 
-export function errorHandler(err: unknown, _req: Request, res: Response, _next: NextFunction) {
+export function errorHandler(err: unknown, req: Request, res: Response, _next: NextFunction) {
   if (res.headersSent) {
     return;
   }
@@ -26,10 +27,10 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
   // invalid_text_representation — e.g. a malformed UUID reaching a query.
   // A client mistake, not a server fault — no error-level log needed.
   if (getPgErrorCode(err) === '22P02') {
-    res.status(400).json({ error: 'Invalid identifier format' });
+    sendProblem(res, 400, 'Invalid identifier format', req.originalUrl);
     return;
   }
 
   console.error(err);
-  res.status(500).json({ error: 'Internal server error' });
+  sendProblem(res, 500, 'Internal server error', req.originalUrl);
 }

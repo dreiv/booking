@@ -7,6 +7,7 @@
     "./db-schema": "./src/db/schema.ts",
     "./booking-schema": "./src/schemas/booking.schema.ts",
     "./idempotency-schema": "./src/schemas/idempotency.schema.ts",
+    "./problem-details-schema": "./src/schemas/problemDetails.schema.ts",
     "./package.json": "./package.json"
   },
   "scripts": {

@@ -5,6 +5,7 @@ import { bookings } from 'utils/db-schema';
 import { createBookingSchema, bookingIdParamSchema } from 'utils/booking-schema';
 import { createIdempotencyMiddleware } from '../middleware/idempotency.ts';
 import { readLimiter, writeLimiter } from '../middleware/rateLimiter.ts';
+import { sendProblem, formatZodError } from '../utils/problemDetails.ts';
 
 export function createBookingsRouter(db: Database) {
   const router = Router();
@@ -18,13 +19,13 @@ export function createBookingsRouter(db: Database) {
   router.get('/:id', readLimiter, async (req, res) => {
     const idResult = bookingIdParamSchema.safeParse(req.params.id);
     if (!idResult.success) {
-      res.status(400).json({ error: 'Invalid identifier format' });
+      sendProblem(res, 400, 'Invalid identifier format', req.originalUrl);
       return;
     }
 
     const [booking] = await db.select().from(bookings).where(eq(bookings.id, idResult.data));
     if (!booking) {
-      res.status(404).json({ error: `Booking '${req.params.id}' not found` });
+      sendProblem(res, 404, `Booking '${req.params.id}' not found`, req.originalUrl);
       return;
     }
     res.json(booking);
@@ -33,7 +34,7 @@ export function createBookingsRouter(db: Database) {
   router.post('/', writeLimiter, idempotency, async (req, res) => {
     const result = createBookingSchema.safeParse(req.body);
     if (!result.success) {
-      res.status(400).json({ error: result.error.flatten() });
+      sendProblem(res, 400, formatZodError(result.error), req.originalUrl);
       return;
     }
     const [newBooking] = await db.insert(bookings).values(result.data).returning();
