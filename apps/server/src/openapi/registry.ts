@@ -33,11 +33,21 @@ registry.registerPath({
   path: '/api/bookings',
   summary: 'Create a booking',
   request: {
+    headers: z.object({
+      'idempotency-key': z
+        .string()
+        .optional()
+        .openapi({ description: 'Optional client-generated key to safely retry this request.' }),
+    }),
     body: { content: { 'application/json': { schema: createBookingSchema } } },
   },
   responses: {
     201: { description: 'Created', content: { 'application/json': { schema: bookingSchema } } },
     400: { description: 'Invalid payload' },
+    409: {
+      description:
+        'Idempotency-Key reused with a different payload, or a duplicate request is already in flight',
+    },
   },
 });
 

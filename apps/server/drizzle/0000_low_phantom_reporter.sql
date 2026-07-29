@@ -9,3 +9,12 @@ CREATE TABLE "bookings" (
 	"status" "booking_status" DEFAULT 'pending' NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
+--> statement-breakpoint
+CREATE TABLE "idempotency_keys" (
+	"key" text PRIMARY KEY NOT NULL,
+	"request_path" text NOT NULL,
+	"request_hash" text NOT NULL,
+	"response_status" integer,
+	"response_body" jsonb,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL
+);

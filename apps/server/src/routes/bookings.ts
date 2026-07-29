@@ -3,9 +3,11 @@ import { eq } from 'drizzle-orm';
 import type { Database } from '../db/types.ts';
 import { bookings } from 'utils/db-schema';
 import { createBookingSchema, bookingIdParamSchema } from 'utils/booking-schema';
+import { createIdempotencyMiddleware } from '../middleware/idempotency.ts';
 
 export function createBookingsRouter(db: Database) {
   const router = Router();
+  const idempotency = createIdempotencyMiddleware(db);
 
   router.get('/', async (_req, res) => {
     const data = await db.select().from(bookings);
@@ -27,7 +29,7 @@ export function createBookingsRouter(db: Database) {
     res.json(booking);
   });
 
-  router.post('/', async (req, res) => {
+  router.post('/', idempotency, async (req, res) => {
     const result = createBookingSchema.safeParse(req.body);
     if (!result.success) {
       res.status(400).json({ error: result.error.flatten() });
