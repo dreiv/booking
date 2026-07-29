@@ -1,13 +1,17 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import { eq, sql } from 'drizzle-orm';
 import { idempotencyKeys } from 'utils/db-schema';
-import { createTestDb } from './testDb.ts';
+import { createTestDb, resetTestDb } from './testDb.ts';
 import type { Database } from '../src/db/types.ts';
 
 let db: Database;
 
-beforeEach(async () => {
+beforeAll(async () => {
   db = await createTestDb();
+});
+
+beforeEach(async () => {
+  await resetTestDb(db);
 });
 
 describe('prune_expired_idempotency_keys_now', () => {

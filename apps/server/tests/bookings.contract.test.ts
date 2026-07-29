@@ -1,16 +1,23 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/app.ts';
 import { bookingSchema } from 'utils/booking-schema';
-import { beforeEach } from 'vitest';
-import { createTestDb } from './testDb.ts';
+import { createTestDb, resetTestDb } from './testDb.ts';
 import { createCorsOptions } from '../src/corsOptions.ts';
+import type { Database } from '../src/db/types.ts';
 
+let db: Database;
 let app: ReturnType<typeof createApp>;
 
-beforeEach(async () => {
-  app = createApp(await createTestDb(), createCorsOptions(['http://localhost:3000']));
+beforeAll(async () => {
+  db = await createTestDb();
+  app = createApp(db, createCorsOptions(['http://localhost:3000']));
 });
+
+beforeEach(async () => {
+  await resetTestDb(db);
+});
+
 describe('Bookings API contract', () => {
   it('GET /api/bookings response items conform to bookingSchema', async () => {
     const response = await request(app).get('/api/bookings');
