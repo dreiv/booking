@@ -3,10 +3,10 @@ import cors from 'cors';
 import type { CorsOptions } from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import pinoHttp from 'pino-http';
-import type { Database } from './db/types.ts';
-import { createBookingsRouter } from './routes/bookings.ts';
-import { generateOpenApiDocument } from './openapi/registry.ts';
-import { errorHandler } from './middleware/errorHandler.ts';
+import type { Database } from './shared/db/types.ts';
+import { createBookingsRouter } from './bookings/bookings.router.ts';
+import { generateOpenApiDocument } from './bookings/bookings.openapi.ts';
+import { errorHandler } from './shared/http/errorHandler.ts';
 import { logger } from './logger.ts';
 
 export function createApp(db: Database, corsOptions: CorsOptions, trustProxy = false) {

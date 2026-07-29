@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import request from 'supertest';
-import { createApp } from '../src/app.ts';
+import { createApp } from '../../src/app.ts';
 import { bookingSchema } from 'utils/booking-schema';
 import { problemDetailsSchema } from 'utils/problem-details-schema';
-import { createTestDb, resetTestDb } from './testDb.ts';
-import { createCorsOptions } from '../src/corsOptions.ts';
-import type { Database } from '../src/db/types.ts';
+import { createTestDb, resetTestDb } from '../testDb.ts';
+import { createCorsOptions } from '../../src/shared/cors.ts';
+import type { Database } from '../../src/shared/db/types.ts';
 
 let db: Database;
 let app: ReturnType<typeof createApp>;

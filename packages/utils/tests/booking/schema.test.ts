@@ -1,5 +1,5 @@
 import { expect, test } from 'vite-plus/test';
-import { bookingQuerySchema } from '../src/schemas/booking.schema.ts';
+import { bookingQuerySchema } from '../../src/booking/schema.ts';
 
 test('applies default sort, order, page, and limit', () => {
   const result = bookingQuerySchema.parse({});

@@ -1,6 +1,6 @@
 import rateLimit from 'express-rate-limit';
 import type { Request, Response } from 'express';
-import { sendProblem } from '../utils/problemDetails.ts';
+import { sendProblem } from './problemDetails.ts';
 
 const READ_WINDOW_MS = 60 * 1000; // 1m
 const READ_MAX_REQUESTS = 100;

@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
-import { sendProblem } from '../utils/problemDetails.ts';
+import { sendProblem } from './problemDetails.ts';
 
 const MAX_QUERY_PARAMS = 10;
 

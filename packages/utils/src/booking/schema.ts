@@ -2,7 +2,7 @@ import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
 import { bookings, roomTypeEnum, bookingStatusEnum } from '../db/schema.ts';
-import { isValidBookingDateRange } from '../validation/bookingDates.ts';
+import { isValidBookingDateRange } from './dates.ts';
 
 extendZodWithOpenApi(z);
 

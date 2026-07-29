@@ -5,9 +5,9 @@
   "type": "module",
   "exports": {
     "./db-schema": "./src/db/schema.ts",
-    "./booking-schema": "./src/schemas/booking.schema.ts",
-    "./idempotency-schema": "./src/schemas/idempotency.schema.ts",
-    "./problem-details-schema": "./src/schemas/problemDetails.schema.ts",
+    "./booking-schema": "./src/booking/schema.ts",
+    "./idempotency-schema": "./src/idempotency/schema.ts",
+    "./problem-details-schema": "./src/problem-details/schema.ts",
     "./package.json": "./package.json"
   },
   "scripts": {

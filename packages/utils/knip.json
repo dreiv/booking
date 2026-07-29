@@ -2,9 +2,9 @@
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": [
     "src/db/schema.ts",
-    "src/schemas/booking.schema.ts",
-    "src/schemas/idempotency.schema.ts",
-    "src/schemas/problemDetails.schema.ts"
+    "src/booking/schema.ts",
+    "src/idempotency/schema.ts",
+    "src/problem-details/schema.ts"
   ],
   "project": ["src/**/*.ts", "tests/**/*.ts"]
 }

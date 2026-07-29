@@ -1,4 +1,4 @@
-import { db } from '../src/db/client.ts';
+import { db } from '../src/shared/db/client.ts';
 import { bookings } from 'utils/db-schema';
 
 const seedData = [

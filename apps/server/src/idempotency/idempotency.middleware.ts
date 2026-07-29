@@ -2,10 +2,10 @@ import type { NextFunction, Request, Response } from 'express';
 import { createHash } from 'node:crypto';
 import { eq } from 'drizzle-orm';
 import type { Logger } from 'pino';
-import type { Database } from '../db/types.ts';
+import type { Database } from '../shared/db/types.ts';
 import { idempotencyKeys } from 'utils/db-schema';
 import { idempotencyKeySchema } from 'utils/idempotency-schema';
-import { sendProblem } from '../utils/problemDetails.ts';
+import { sendProblem } from '../shared/http/problemDetails.ts';
 
 const IDEMPOTENCY_KEY_TTL_MS = 24 * 60 * 60 * 1000; // 24h
 

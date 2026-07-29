@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
-import { env } from '../env.ts';
+import { env } from '../../env.ts';
 import { schema } from 'utils/db-schema';
 
 const pool = new Pool({

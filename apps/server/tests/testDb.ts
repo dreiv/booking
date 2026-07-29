@@ -4,7 +4,7 @@ import { migrate } from 'drizzle-orm/pglite/migrator';
 import { sql } from 'drizzle-orm';
 import { fileURLToPath } from 'node:url';
 import { schema } from 'utils/db-schema';
-import type { Database } from '../src/db/types.ts';
+import type { Database } from '../src/shared/db/types.ts';
 
 export async function createTestDb(): Promise<Database> {
   const client = new PGlite();

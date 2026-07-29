@@ -1,17 +1,17 @@
 import { Router } from 'express';
 import { and, asc, count, desc, eq, ilike } from 'drizzle-orm';
 import type { SQL } from 'drizzle-orm';
-import type { Database } from '../db/types.ts';
+import type { Database } from '../shared/db/types.ts';
 import { bookings } from 'utils/db-schema';
 import {
   createBookingSchema,
   bookingIdParamSchema,
   bookingQuerySchema,
 } from 'utils/booking-schema';
-import { createIdempotencyMiddleware } from '../middleware/idempotency.ts';
-import { readLimiter, writeLimiter } from '../middleware/rateLimiter.ts';
-import { queryParamGuard } from '../middleware/queryParamGuard.ts';
-import { sendProblem, formatZodError } from '../utils/problemDetails.ts';
+import { createIdempotencyMiddleware } from '../idempotency/idempotency.middleware.ts';
+import { readLimiter, writeLimiter } from '../shared/http/rateLimiter.ts';
+import { queryParamGuard } from '../shared/http/queryParamGuard.ts';
+import { sendProblem, formatZodError } from '../shared/http/problemDetails.ts';
 
 export function createBookingsRouter(db: Database) {
   const router = Router();

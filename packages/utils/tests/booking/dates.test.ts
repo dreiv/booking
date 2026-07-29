@@ -1,5 +1,5 @@
 import { expect, test } from 'vite-plus/test';
-import { isValidBookingDateRange } from '../src/validation/bookingDates.ts';
+import { isValidBookingDateRange } from '../../src/booking/dates.ts';
 
 test('accepts a checkOut date after checkIn', () => {
   expect(isValidBookingDateRange('2026-08-01', '2026-08-05')).toBe(true);
