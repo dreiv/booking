@@ -1,5 +1,5 @@
 import { expect, test } from 'vite-plus/test';
-import { idempotencyKeySchema } from '../../src/idempotency/schema.ts';
+import { idempotencyKeySchema } from '#/idempotency/schema.ts';
 
 test('accepts a reasonable idempotency key', () => {
   expect(idempotencyKeySchema.safeParse('a1b2c3').success).toBe(true);

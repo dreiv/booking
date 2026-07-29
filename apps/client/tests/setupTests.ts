@@ -1,7 +1,7 @@
 import { beforeAll, afterEach, afterAll } from 'vite-plus/test';
 
 if (typeof window !== 'undefined') {
-  const { worker } = await import('@/mocks/browser');
+  const { worker } = await import('#/mocks/browser');
 
   beforeAll(async () => {
     await worker.start({ quiet: true, onUnhandledRequest: 'bypass' });

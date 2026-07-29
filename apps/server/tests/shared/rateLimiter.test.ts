@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import request from 'supertest';
-import { createApp } from '../../src/app.ts';
+import { createApp } from '#/app.ts';
 import { createTestDb, resetTestDb } from '../testDb.ts';
-import { createCorsOptions } from '../../src/shared/cors.ts';
-import type { Database } from '../../src/shared/db/types.ts';
+import { createCorsOptions } from '#/shared/cors.ts';
+import type { Database } from '#/shared/db/types.ts';
 
 let db: Database;
 let app: ReturnType<typeof createApp>;

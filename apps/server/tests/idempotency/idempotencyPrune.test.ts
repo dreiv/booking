@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import { eq, sql } from 'drizzle-orm';
 import { idempotencyKeys } from 'utils/db-schema';
 import { createTestDb, resetTestDb } from '../testDb.ts';
-import type { Database } from '../../src/shared/db/types.ts';
+import type { Database } from '#/shared/db/types.ts';
 
 let db: Database;
 

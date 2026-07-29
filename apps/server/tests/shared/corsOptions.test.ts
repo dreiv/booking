@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { resolveAllowedOrigins } from '../../src/shared/cors.ts';
+import { resolveAllowedOrigins } from '#/shared/cors.ts';
 
 describe('resolveAllowedOrigins', () => {
   it('parses a comma-separated list of origins', () => {

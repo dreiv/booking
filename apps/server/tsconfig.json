@@ -3,7 +3,8 @@
   "compilerOptions": {
     "lib": ["ES2023"],
     "types": ["node"],
-    "allowArbitraryExtensions": true
+    "allowArbitraryExtensions": true,
+    "paths": { "#/*": ["./src/*"] }
   },
   "include": ["src", "scripts"]
 }

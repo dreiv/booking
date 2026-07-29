@@ -1,5 +1,5 @@
 import { expect, test } from 'vite-plus/test';
-import { problemDetailsSchema } from '../../src/problem-details/schema.ts';
+import { problemDetailsSchema } from '#/problem-details/schema.ts';
 
 test('accepts a well-formed problem details object', () => {
   const result = problemDetailsSchema.safeParse({

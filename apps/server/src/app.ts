@@ -12,7 +12,7 @@ import { logger } from './logger.ts';
 export function createApp(db: Database, corsOptions: CorsOptions, trustProxy = false) {
   const app = express();
   if (trustProxy) app.set('trust proxy', 1);
-  app.use(pinoHttp({ logger }));
+  app.use(pinoHttp({ logger, autoLogging: false }));
   app.use(cors(corsOptions));
   app.use(express.json());
   app.get('/health', (_req, res) => res.status(200).json({ status: 'ok' }));
