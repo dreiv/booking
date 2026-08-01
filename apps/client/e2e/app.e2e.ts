@@ -12,7 +12,6 @@ test.describe('Client App - E2E Suite', () => {
             {
               id: 'bkg-1',
               guestName: 'Playwright Guest',
-              roomType: 'double',
               checkIn: '2026-08-01',
               checkOut: '2026-08-03',
               status: 'pending',

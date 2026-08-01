@@ -19,7 +19,6 @@ beforeEach(async () => {
 
 const validPayload = {
   guestName: 'Rate Limit Guest',
-  roomType: 'single',
   checkIn: '2026-11-01',
   checkOut: '2026-11-03',
 };

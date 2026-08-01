@@ -34,7 +34,6 @@ export default function () {
 
   const payload = JSON.stringify({
     guestName: `Load Test Guest ${__VU}-${__ITER}`,
-    roomType: 'single',
     checkIn: '2026-08-01',
     checkOut: '2026-08-03',
   });

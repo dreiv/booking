@@ -44,18 +44,23 @@ erDiagram
         int total_reserved
     }
 
-    guest {
-        int guest_id PK
+    users {
+        int user_id PK
+        string email
+        string google_id "nullable - set once linked via Google login"
+        string role "admin | host | guest"
         string first_name
         string last_name
-        string email
     }
 
     booking {
         int booking_id PK
         int room_type_id FK
         int hotel_id FK
-        int guest_id FK
+        int user_id FK "nullable - null for unregistered guest checkout"
+        string guest_email "used when user_id is null"
+        string guest_first_name "used when user_id is null"
+        string guest_last_name "used when user_id is null"
         date start_date
         date end_date
         string status "held | confirmed | cancelled | expired"
@@ -85,10 +90,22 @@ erDiagram
 
     hotel ||--o{ booking : "has"
     room_type ||--o{ booking : "has"
-    guest ||--o{ booking : "makes"
+    users |o--o{ booking : "makes"
 
     booking ||--o{ transaction : "has"
 ```
+
+## `users`
+
+Guests, hosts, and admins are all authenticated entities in the same system (one login, three
+permission levels), so they're modeled as a single `users` table with a `role` column. `host`
+additionally implies ownership of one or more `hotel` rows (a `host_id FK` on `hotel`, not shown
+above yet — added when `hotel` gets its host-assignment feature).
+
+Not every booking has a logged-in user behind it, though — guest checkout (no account) is
+supported. `booking.user_id` is **nullable**: when set, it's a registered user's booking; when
+`null`, the `guest_email` / `guest_first_name` / `guest_last_name` fields on `booking` are the only
+record of who made it. Auth is handled via Google OAuth (`google_id`), not stored passwords.
 
 ## Booking Lifecycle Fields
 

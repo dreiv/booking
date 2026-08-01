@@ -38,7 +38,6 @@ describe('Bookings API', () => {
   it('POST /api/bookings rejects a checkOut date before checkIn', async () => {
     const response = await request(app).post('/api/bookings').send({
       guestName: 'Test Guest',
-      roomType: 'single',
       checkIn: '2026-08-05',
       checkOut: '2026-08-01',
     });

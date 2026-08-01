@@ -4,19 +4,16 @@ import { bookings } from 'utils/db-schema';
 const seedData = [
   {
     guestName: 'Ada Lovelace',
-    roomType: 'suite' as const,
     checkIn: '2026-08-01',
     checkOut: '2026-08-05',
   },
   {
     guestName: 'Alan Turing',
-    roomType: 'double' as const,
     checkIn: '2026-08-10',
     checkOut: '2026-08-12',
   },
   {
     guestName: 'Grace Hopper',
-    roomType: 'single' as const,
     checkIn: '2026-09-01',
     checkOut: '2026-09-03',
   },

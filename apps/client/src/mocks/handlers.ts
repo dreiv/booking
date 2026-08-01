@@ -7,7 +7,6 @@ export const handlers = [
         {
           id: 'bkg-1',
           guestName: 'Hello from MSW!',
-          roomType: 'suite',
           checkIn: '2026-08-01',
           checkOut: '2026-08-05',
           status: 'confirmed',

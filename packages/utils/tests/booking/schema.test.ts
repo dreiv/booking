@@ -19,7 +19,3 @@ test('rejects a limit above the maximum', () => {
 test('rejects an unrecognized query key', () => {
   expect(bookingQuerySchema.safeParse({ rooomType: 'single' }).success).toBe(false);
 });
-
-test('rejects an invalid roomType value', () => {
-  expect(bookingQuerySchema.safeParse({ roomType: 'penthouse' }).success).toBe(false);
-});

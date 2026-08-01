@@ -23,11 +23,10 @@ export function createBookingsRouter(db: Database) {
       sendProblem(res, 400, formatZodError(queryResult.error), req.originalUrl);
       return;
     }
-    const { search, roomType, status, sortBy, order, page, limit } = queryResult.data;
+    const { search, status, sortBy, order, page, limit } = queryResult.data;
 
     const conditions: SQL[] = [];
     if (search) conditions.push(ilike(bookings.guestName, `%${search}%`));
-    if (roomType) conditions.push(eq(bookings.roomType, roomType));
     if (status) conditions.push(eq(bookings.status, status));
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 

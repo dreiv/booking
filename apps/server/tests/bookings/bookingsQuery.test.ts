@@ -17,14 +17,9 @@ beforeAll(async () => {
 beforeEach(async () => {
   await resetTestDb(db);
   await db.insert(bookings).values([
-    { guestName: 'Ada Lovelace', roomType: 'suite', checkIn: '2026-08-01', checkOut: '2026-08-05' },
-    { guestName: 'Alan Turing', roomType: 'double', checkIn: '2026-08-10', checkOut: '2026-08-12' },
-    {
-      guestName: 'Grace Hopper',
-      roomType: 'single',
-      checkIn: '2026-09-01',
-      checkOut: '2026-09-03',
-    },
+    { guestName: 'Ada Lovelace', checkIn: '2026-08-01', checkOut: '2026-08-05' },
+    { guestName: 'Alan Turing', checkIn: '2026-08-10', checkOut: '2026-08-12' },
+    { guestName: 'Grace Hopper', checkIn: '2026-09-01', checkOut: '2026-09-03' },
   ]);
 });
 
@@ -32,12 +27,6 @@ describe('GET /api/bookings query support', () => {
   it('returns pagination meta alongside the data array', async () => {
     const response = await request(app).get('/api/bookings');
     expect(response.body.meta).toEqual({ page: 1, limit: 20, totalRecords: 3, totalPages: 1 });
-  });
-
-  it('filters by roomType', async () => {
-    const response = await request(app).get('/api/bookings').query({ roomType: 'suite' });
-    expect(response.body.data).toHaveLength(1);
-    expect(response.body.data[0].guestName).toBe('Ada Lovelace');
   });
 
   it('searches by guest name, case-insensitively', async () => {
@@ -54,7 +43,7 @@ describe('GET /api/bookings query support', () => {
   it('rejects duplicate values for the same filter', async () => {
     const response = await request(app)
       .get('/api/bookings')
-      .query({ roomType: ['single', 'suite'] });
+      .query({ status: ['pending', 'confirmed'] });
     expect(response.status).toBe(400);
   });
 

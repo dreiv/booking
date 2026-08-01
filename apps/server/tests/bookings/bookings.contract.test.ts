@@ -32,7 +32,6 @@ describe('Bookings API contract', () => {
   it('POST /api/bookings response conforms to bookingSchema', async () => {
     const response = await request(app).post('/api/bookings').send({
       guestName: 'Grace Hopper',
-      roomType: 'single',
       checkIn: '2026-09-01',
       checkOut: '2026-09-03',
     });

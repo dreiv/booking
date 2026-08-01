@@ -21,7 +21,7 @@ onMounted(async () => {
     <p v-if="error" role="alert">{{ error }}</p>
     <ul v-else>
       <li v-for="booking in bookings" :key="booking.id">
-        {{ booking.guestName }} — {{ booking.roomType }} ({{ booking.status }})
+        {{ booking.guestName }} — ({{ booking.status }})
       </li>
     </ul>
   </main>

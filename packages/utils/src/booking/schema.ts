@@ -1,7 +1,7 @@
 import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
-import { bookings, roomTypeEnum, bookingStatusEnum } from '../db/schema.ts';
+import { bookings, bookingStatusEnum } from '../db/schema.ts';
 import { isValidBookingDateRange } from './dates.ts';
 
 extendZodWithOpenApi(z);
@@ -18,7 +18,7 @@ export const createBookingSchema = createInsertSchema(bookings, {
   checkIn: (schema) => schema.date(),
   checkOut: (schema) => schema.date(),
 })
-  .pick({ guestName: true, roomType: true, checkIn: true, checkOut: true })
+  .pick({ guestName: true, checkIn: true, checkOut: true })
   .strict()
   .refine((data) => isValidBookingDateRange(data.checkIn, data.checkOut), {
     message: 'checkOut must be after checkIn',
@@ -34,7 +34,6 @@ const MAX_PAGE_LIMIT = 100;
 export const bookingQuerySchema = z
   .object({
     search: z.string().trim().min(1).optional(),
-    roomType: z.enum(roomTypeEnum.enumValues).optional(),
     status: z.enum(bookingStatusEnum.enumValues).optional(),
     sortBy: z.enum(['checkIn', 'checkOut', 'createdAt']).default('createdAt'),
     order: z.enum(['asc', 'desc']).default('desc'),
