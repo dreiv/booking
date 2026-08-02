@@ -181,3 +181,5 @@ answers what happens to inventory on payment failure without needing a saga.
   intentionally not blocking Phase 1.
 - Whether `pg_cron` is available in the eventual hosting environment — see
   [ADR-002](../adrs/002-temporary-booking-soft-lock.md) for the fallback if not.
+- How are failed/retried payment attempts represented? `booking.status` has no state for
+  "payment declined, still held" — `transaction` only records settled outcomes.

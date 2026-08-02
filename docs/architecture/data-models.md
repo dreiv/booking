@@ -73,7 +73,7 @@ erDiagram
     transaction {
         int transaction_id PK
         string booking_id FK
-        string transaction_type
+        string transaction_type "payment | refund"
         decimal amount
         timestamp transaction_date
         string notes
@@ -118,6 +118,13 @@ explicitly configured. This changes the atomic conditional `UPDATE` in the Inven
 Consistency section below: the capacity check becomes
 `total_reserved + n <= total_inventory * (1 + overbooking_rate)` rather than the flat
 `<= total_inventory`.
+
+## Transactions
+
+`transaction_type` is a closed enum (`payment | refund`) rather than free text, matching the
+project's convention for other small fixed vocabularies (`booking.status`, `users.role`).
+`amount` is signed — positive for payments, negative for refunds — so a booking's net amount
+paid is a plain `SUM(amount)` across its transactions, no `CASE` needed.
 
 ## Booking Lifecycle Fields
 

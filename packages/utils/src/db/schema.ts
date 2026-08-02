@@ -19,6 +19,7 @@ export const bookingStatusEnum = pgEnum('booking_status', [
   'expired',
 ]);
 export const userRoleEnum = pgEnum('user_role', ['admin', 'host', 'guest']);
+export const transactionTypeEnum = pgEnum('transaction_type', ['payment', 'refund']);
 
 export const booking = pgTable('booking', {
   bookingId: uuid('booking_id').primaryKey().defaultRandom(),
@@ -40,6 +41,17 @@ export const booking = pgTable('booking', {
   roomCount: integer('room_count').notNull().default(1),
   expiresAt: timestamp('expires_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const transaction = pgTable('transaction', {
+  transactionId: serial('transaction_id').primaryKey(),
+  bookingId: uuid('booking_id')
+    .notNull()
+    .references(() => booking.bookingId),
+  transactionType: transactionTypeEnum('transaction_type').notNull(),
+  amount: numeric('amount', { precision: 10, scale: 2 }).notNull(), // negative for refunds
+  transactionDate: timestamp('transaction_date', { withTimezone: true }).notNull().defaultNow(),
+  notes: text('notes'),
 });
 
 export const idempotencyKeys = pgTable('idempotency_keys', {
@@ -129,6 +141,7 @@ export const roomTypeInventory = pgTable(
 
 export const schema = {
   booking,
+  transaction,
   idempotencyKeys,
   hotel,
   users,
