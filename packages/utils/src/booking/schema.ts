@@ -7,16 +7,16 @@ import { isValidBookingDateRange } from './dates.ts';
 extendZodWithOpenApi(z);
 
 export const bookingSchema = createSelectSchema(booking, {
-  startDate: (schema) => schema.date(),
-  endDate: (schema) => schema.date(),
+  checkIn: (schema) => schema.date(),
+  checkOut: (schema) => schema.date(),
   createdAt: z.string().datetime(),
 })
   .strict()
   .openapi('Booking');
 
 export const createBookingSchema = createInsertSchema(booking, {
-  startDate: (schema) => schema.date(),
-  endDate: (schema) => schema.date(),
+  checkIn: (schema) => schema.date(),
+  checkOut: (schema) => schema.date(),
 })
   .pick({
     hotelId: true,
@@ -25,14 +25,14 @@ export const createBookingSchema = createInsertSchema(booking, {
     guestEmail: true,
     guestFirstName: true,
     guestLastName: true,
-    startDate: true,
-    endDate: true,
+    checkIn: true,
+    checkOut: true,
     roomCount: true,
   })
   .strict()
-  .refine((data) => isValidBookingDateRange(data.startDate, data.endDate), {
-    message: 'endDate must be after startDate',
-    path: ['endDate'],
+  .refine((data) => isValidBookingDateRange(data.checkIn, data.checkOut), {
+    message: 'checkOut must be after checkIn',
+    path: ['checkOut'],
   })
   .refine((data) => data.userId != null && data.guestEmail != null, {
     message: 'Both userId and guestEmail are required',
@@ -49,7 +49,7 @@ export const bookingQuerySchema = z
   .object({
     search: z.string().trim().min(1).optional(),
     status: z.enum(bookingStatusEnum.enumValues).optional(),
-    sortBy: z.enum(['startDate', 'endDate', 'createdAt']).default('createdAt'),
+    sortBy: z.enum(['checkIn', 'checkOut', 'createdAt']).default('createdAt'),
     order: z.enum(['asc', 'desc']).default('desc'),
     page: z.coerce.number().int().min(1).default(1),
     limit: z.coerce.number().int().min(1).max(MAX_PAGE_LIMIT).default(DEFAULT_PAGE_LIMIT),

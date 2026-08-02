@@ -62,8 +62,8 @@ erDiagram
         string guest_email
         string guest_first_name "optional"
         string guest_last_name "optional"
-        date start_date
-        date end_date
+        date check_in
+        date check_out
         string status "held | confirmed | cancelled | expired"
         int room_count
         timestamp expires_at "set while held, null otherwise"
@@ -137,7 +137,7 @@ UPDATE room_type_inventory
 SET total_reserved = total_reserved + :room_count
 WHERE hotel_id = :hotel_id
   AND room_type_id = :room_type_id
-  AND date BETWEEN :start_date AND :end_date
+  AND date BETWEEN :check_in AND :check_out
   AND total_reserved + :room_count <= total_inventory
 RETURNING date;
 ```
@@ -156,13 +156,13 @@ Scheduled via `pg_cron` rather than app-side polling — see [ADR-002](../adrs/0
 UPDATE booking
 SET status = 'expired'
 WHERE status = 'held' AND expires_at < now()
-RETURNING booking_id, hotel_id, room_type_id, start_date, end_date, room_count;
+RETURNING booking_id, hotel_id, room_type_id, check_in, check_out, room_count;
 
 -- for each returned booking, in the same transaction:
 UPDATE room_type_inventory
 SET total_reserved = total_reserved - :room_count
 WHERE hotel_id = :hotel_id AND room_type_id = :room_type_id
-  AND date BETWEEN :start_date AND :end_date;
+  AND date BETWEEN :check_in AND :check_out;
 ```
 
 Both statements must commit together per booking — if a crash happens between them, inventory

@@ -49,8 +49,8 @@ beforeEach(async () => {
       guestEmail: 'ada@example.com',
       guestFirstName: 'Ada',
       guestLastName: 'Lovelace',
-      startDate: '2026-08-01',
-      endDate: '2026-08-05',
+      checkIn: '2026-08-01',
+      checkOut: '2026-08-05',
     },
     {
       hotelId: testHotel.hotelId,
@@ -59,8 +59,8 @@ beforeEach(async () => {
       guestEmail: 'alan@example.com',
       guestFirstName: 'Alan',
       guestLastName: 'Turing',
-      startDate: '2026-08-10',
-      endDate: '2026-08-12',
+      checkIn: '2026-08-10',
+      checkOut: '2026-08-12',
     },
     {
       hotelId: testHotel.hotelId,
@@ -69,8 +69,8 @@ beforeEach(async () => {
       guestEmail: 'grace@example.com',
       guestFirstName: 'Grace',
       guestLastName: 'Hopper',
-      startDate: '2026-09-01',
-      endDate: '2026-09-03',
+      checkIn: '2026-09-01',
+      checkOut: '2026-09-03',
     },
   ]);
 });

@@ -39,9 +39,9 @@ const seedUsers = await db
   .returning();
 
 const dateRanges = [
-  { startDate: '2026-08-01', endDate: '2026-08-05' },
-  { startDate: '2026-08-10', endDate: '2026-08-12' },
-  { startDate: '2026-09-01', endDate: '2026-09-03' },
+  { checkIn: '2026-08-01', checkOut: '2026-08-05' },
+  { checkIn: '2026-08-10', checkOut: '2026-08-12' },
+  { checkIn: '2026-09-01', checkOut: '2026-09-03' },
 ];
 
 const seedData = seedUsers.map((user, i) => {
@@ -54,8 +54,8 @@ const seedData = seedUsers.map((user, i) => {
     guestEmail: user.email,
     guestFirstName: user.firstName,
     guestLastName: user.lastName,
-    startDate: range.startDate,
-    endDate: range.endDate,
+    checkIn: range.checkIn,
+    checkOut: range.checkOut,
     status: 'confirmed' as const,
   };
 });

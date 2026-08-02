@@ -58,8 +58,8 @@ describe('Bookings API contract', () => {
       roomTypeId: testRoomType.roomTypeId,
       userId: testUser.userId,
       guestEmail: 'guest@example.com',
-      startDate: '2026-09-01',
-      endDate: '2026-09-03',
+      checkIn: '2026-09-01',
+      checkOut: '2026-09-03',
     });
 
     const result = bookingSchema.safeParse(response.body);

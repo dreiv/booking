@@ -58,14 +58,14 @@ describe('Bookings API', () => {
     expect(response.headers['content-type']).toMatch(/json/);
   });
 
-  it('POST /api/bookings rejects an endDate before startDate', async () => {
+  it('POST /api/bookings rejects an checkOut before checkIn', async () => {
     const response = await request(app).post('/api/bookings').send({
       hotelId: testHotel.hotelId,
       roomTypeId: testRoomType.roomTypeId,
       userId: testUser.userId,
       guestEmail: 'guest@example.com',
-      startDate: '2026-08-05',
-      endDate: '2026-08-01',
+      checkIn: '2026-08-05',
+      checkOut: '2026-08-01',
     });
     expect(response.status).toBe(400);
   });

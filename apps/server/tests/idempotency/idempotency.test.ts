@@ -13,8 +13,8 @@ let validPayload: {
   roomTypeId: number;
   userId: number;
   guestEmail: string;
-  startDate: string;
-  endDate: string;
+  checkIn: string;
+  checkOut: string;
 };
 
 beforeAll(async () => {
@@ -54,8 +54,8 @@ beforeEach(async () => {
     roomTypeId: testRoomType.roomTypeId,
     userId: testUser.userId,
     guestEmail: 'idem@example.com',
-    startDate: '2026-10-01',
-    endDate: '2026-10-03',
+    checkIn: '2026-10-01',
+    checkOut: '2026-10-03',
   };
 });
 
