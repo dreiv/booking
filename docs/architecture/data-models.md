@@ -72,7 +72,7 @@ erDiagram
 
     transaction {
         int transaction_id PK
-        int booking_id FK
+        string booking_id FK
         string transaction_type
         decimal amount
         timestamp transaction_date
@@ -107,6 +107,16 @@ Not every booking has a logged-in user behind it, though — guest checkout (no 
 supported. `booking.user_id` is **nullable**: when set, it's a registered user's booking; when
 `null`, the `guest_email` / `guest_first_name` / `guest_last_name` fields on `booking` are the only
 record of who made it. Auth is handled via Google OAuth (`google_id`), not stored passwords.
+
+## Overbooking
+
+Each `room_type` carries an `overbooking_rate` — a percentage stored as a decimal (e.g. `0.05`
+= allow bookings up to 5% over `total_inventory`), set per room type rather than per hotel,
+since cancellation/no-show rates vary by room category. Default is `0` (no overbooking) unless
+explicitly configured. This changes the atomic conditional `UPDATE` in the Inventory
+Consistency section below: the capacity check becomes
+`total_reserved + n <= total_inventory * (1 + overbooking_rate)` rather than the flat
+`<= total_inventory`.
 
 ## Booking Lifecycle Fields
 
