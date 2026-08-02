@@ -3,12 +3,16 @@ import request from 'supertest';
 import { createApp } from '#/app.ts';
 import { bookingSchema } from 'utils/booking-schema';
 import { problemDetailsSchema } from 'utils/problem-details-schema';
-import { createTestDb, resetTestDb } from '../testDb.ts';
+import { createTestDb, insertOneOrThrow, resetTestDb } from '../testDb.ts';
 import { createCorsOptions } from '#/shared/cors.ts';
 import type { Database } from '#/shared/db/types.ts';
+import { hotel, roomType, users } from 'utils/db-schema';
 
 let db: Database;
 let app: ReturnType<typeof createApp>;
+let testHotel: typeof hotel.$inferSelect;
+let testRoomType: typeof roomType.$inferSelect;
+let testUser: typeof users.$inferSelect;
 
 beforeAll(async () => {
   db = await createTestDb();
@@ -17,6 +21,25 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await resetTestDb(db);
+
+  testHotel = await insertOneOrThrow(
+    db
+      .insert(hotel)
+      .values({ name: 'Test Hotel', address: '1 Test St', location: 'Testville' })
+      .returning(),
+  );
+  testRoomType = await insertOneOrThrow(
+    db
+      .insert(roomType)
+      .values({ hotelId: testHotel.hotelId, name: 'Standard', maxOccupancy: 2 })
+      .returning(),
+  );
+  testUser = await insertOneOrThrow(
+    db
+      .insert(users)
+      .values({ email: 'guest@example.com', role: 'guest', firstName: 'Test', lastName: 'Guest' })
+      .returning(),
+  );
 });
 
 describe('Bookings API contract', () => {
@@ -31,9 +54,12 @@ describe('Bookings API contract', () => {
 
   it('POST /api/bookings response conforms to bookingSchema', async () => {
     const response = await request(app).post('/api/bookings').send({
-      guestName: 'Grace Hopper',
-      checkIn: '2026-09-01',
-      checkOut: '2026-09-03',
+      hotelId: testHotel.hotelId,
+      roomTypeId: testRoomType.roomTypeId,
+      userId: testUser.userId,
+      guestEmail: 'guest@example.com',
+      startDate: '2026-09-01',
+      endDate: '2026-09-03',
     });
 
     const result = bookingSchema.safeParse(response.body);

@@ -1,12 +1,16 @@
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import request from 'supertest';
 import { createApp } from '#/app.ts';
-import { createTestDb, resetTestDb } from '../testDb.ts';
+import { createTestDb, insertOneOrThrow, resetTestDb } from '../testDb.ts';
 import { createCorsOptions } from '#/shared/cors.ts';
 import type { Database } from '#/shared/db/types.ts';
+import { hotel, roomType, users } from 'utils/db-schema';
 
 let db: Database;
 let app: ReturnType<typeof createApp>;
+let testHotel: typeof hotel.$inferSelect;
+let testRoomType: typeof roomType.$inferSelect;
+let testUser: typeof users.$inferSelect;
 
 beforeAll(async () => {
   db = await createTestDb();
@@ -15,6 +19,25 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await resetTestDb(db);
+
+  testHotel = await insertOneOrThrow(
+    db
+      .insert(hotel)
+      .values({ name: 'Test Hotel', address: '1 Test St', location: 'Testville' })
+      .returning(),
+  );
+  testRoomType = await insertOneOrThrow(
+    db
+      .insert(roomType)
+      .values({ hotelId: testHotel.hotelId, name: 'Standard', maxOccupancy: 2 })
+      .returning(),
+  );
+  testUser = await insertOneOrThrow(
+    db
+      .insert(users)
+      .values({ email: 'guest@example.com', role: 'guest', firstName: 'Test', lastName: 'Guest' })
+      .returning(),
+  );
 });
 
 describe('Bookings API', () => {
@@ -35,11 +58,14 @@ describe('Bookings API', () => {
     expect(response.headers['content-type']).toMatch(/json/);
   });
 
-  it('POST /api/bookings rejects a checkOut date before checkIn', async () => {
+  it('POST /api/bookings rejects an endDate before startDate', async () => {
     const response = await request(app).post('/api/bookings').send({
-      guestName: 'Test Guest',
-      checkIn: '2026-08-05',
-      checkOut: '2026-08-01',
+      hotelId: testHotel.hotelId,
+      roomTypeId: testRoomType.roomTypeId,
+      userId: testUser.userId,
+      guestEmail: 'guest@example.com',
+      startDate: '2026-08-05',
+      endDate: '2026-08-01',
     });
     expect(response.status).toBe(400);
   });

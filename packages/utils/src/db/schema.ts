@@ -12,23 +12,13 @@ import {
   primaryKey,
 } from 'drizzle-orm/pg-core';
 
-export const bookingStatusEnum = pgEnum('booking_status', ['pending', 'confirmed', 'cancelled']);
-export const bookingStatusEnum2 = pgEnum('booking_status_v2', [
+export const bookingStatusEnum = pgEnum('booking_status', [
   'held',
   'confirmed',
   'cancelled',
   'expired',
 ]);
 export const userRoleEnum = pgEnum('user_role', ['admin', 'host', 'guest']);
-
-export const bookings = pgTable('bookings', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  guestName: text('guest_name').notNull(),
-  checkIn: date('check_in', { mode: 'string' }).notNull(),
-  checkOut: date('check_out', { mode: 'string' }).notNull(),
-  status: bookingStatusEnum('status').notNull().default('pending'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-});
 
 export const booking = pgTable('booking', {
   bookingId: uuid('booking_id').primaryKey().defaultRandom(),
@@ -38,13 +28,15 @@ export const booking = pgTable('booking', {
   roomTypeId: integer('room_type_id')
     .notNull()
     .references(() => roomType.roomTypeId),
-  userId: integer('user_id').references(() => users.userId),
-  guestEmail: text('guest_email'),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => users.userId),
+  guestEmail: text('guest_email').notNull(),
   guestFirstName: text('guest_first_name'),
   guestLastName: text('guest_last_name'),
   startDate: date('start_date', { mode: 'string' }).notNull(),
   endDate: date('end_date', { mode: 'string' }).notNull(),
-  status: bookingStatusEnum2('status').notNull().default('held'),
+  status: bookingStatusEnum('status').notNull().default('held'),
   roomCount: integer('room_count').notNull().default(1),
   expiresAt: timestamp('expires_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
@@ -136,7 +128,6 @@ export const roomTypeInventory = pgTable(
 );
 
 export const schema = {
-  bookings,
   booking,
   idempotencyKeys,
   hotel,

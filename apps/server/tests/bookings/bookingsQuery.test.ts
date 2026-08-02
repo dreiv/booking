@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import request from 'supertest';
 import { createApp } from '#/app.ts';
-import { createTestDb, resetTestDb } from '../testDb.ts';
+import { createTestDb, insertOneOrThrow, resetTestDb } from '../testDb.ts';
 import { createCorsOptions } from '#/shared/cors.ts';
 import type { Database } from '#/shared/db/types.ts';
-import { bookings } from 'utils/db-schema';
+import { booking, hotel, roomType, users } from 'utils/db-schema';
 
 let db: Database;
 let app: ReturnType<typeof createApp>;
@@ -16,10 +16,62 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await resetTestDb(db);
-  await db.insert(bookings).values([
-    { guestName: 'Ada Lovelace', checkIn: '2026-08-01', checkOut: '2026-08-05' },
-    { guestName: 'Alan Turing', checkIn: '2026-08-10', checkOut: '2026-08-12' },
-    { guestName: 'Grace Hopper', checkIn: '2026-09-01', checkOut: '2026-09-03' },
+
+  const testHotel = await insertOneOrThrow(
+    db
+      .insert(hotel)
+      .values({ name: 'Test Hotel', address: '1 Test St', location: 'Testville' })
+      .returning(),
+  );
+  const testRoomType = await insertOneOrThrow(
+    db
+      .insert(roomType)
+      .values({ hotelId: testHotel.hotelId, name: 'Standard', maxOccupancy: 2 })
+      .returning(),
+  );
+  const testUser = await insertOneOrThrow(
+    db
+      .insert(users)
+      .values({
+        email: 'fixture@example.com',
+        role: 'guest',
+        firstName: 'Fixture',
+        lastName: 'User',
+      })
+      .returning(),
+  );
+
+  await db.insert(booking).values([
+    {
+      hotelId: testHotel.hotelId,
+      roomTypeId: testRoomType.roomTypeId,
+      userId: testUser.userId,
+      guestEmail: 'ada@example.com',
+      guestFirstName: 'Ada',
+      guestLastName: 'Lovelace',
+      startDate: '2026-08-01',
+      endDate: '2026-08-05',
+    },
+    {
+      hotelId: testHotel.hotelId,
+      roomTypeId: testRoomType.roomTypeId,
+      userId: testUser.userId,
+      guestEmail: 'alan@example.com',
+      guestFirstName: 'Alan',
+      guestLastName: 'Turing',
+      startDate: '2026-08-10',
+      endDate: '2026-08-12',
+    },
+    {
+      hotelId: testHotel.hotelId,
+      roomTypeId: testRoomType.roomTypeId,
+      userId: testUser.userId,
+      guestEmail: 'grace@example.com',
+      guestFirstName: 'Grace',
+      guestLastName: 'Hopper',
+      startDate: '2026-09-01',
+      endDate: '2026-09-03',
+    },
   ]);
 });
 
@@ -29,10 +81,10 @@ describe('GET /api/bookings query support', () => {
     expect(response.body.meta).toEqual({ page: 1, limit: 20, totalRecords: 3, totalPages: 1 });
   });
 
-  it('searches by guest name, case-insensitively', async () => {
+  it('searches by guest last name, case-insensitively', async () => {
     const response = await request(app).get('/api/bookings').query({ search: 'turing' });
     expect(response.body.data).toHaveLength(1);
-    expect(response.body.data[0].guestName).toBe('Alan Turing');
+    expect(response.body.data[0].guestLastName).toBe('Turing');
   });
 
   it('rejects an unrecognized filter key', async () => {
@@ -43,7 +95,7 @@ describe('GET /api/bookings query support', () => {
   it('rejects duplicate values for the same filter', async () => {
     const response = await request(app)
       .get('/api/bookings')
-      .query({ status: ['pending', 'confirmed'] });
+      .query({ status: ['confirmed', 'cancelled'] });
     expect(response.status).toBe(400);
   });
 

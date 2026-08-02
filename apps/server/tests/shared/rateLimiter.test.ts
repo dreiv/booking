@@ -1,12 +1,21 @@
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import request from 'supertest';
 import { createApp } from '#/app.ts';
-import { createTestDb, resetTestDb } from '../testDb.ts';
+import { createTestDb, resetTestDb, insertOneOrThrow } from '../testDb.ts';
 import { createCorsOptions } from '#/shared/cors.ts';
 import type { Database } from '#/shared/db/types.ts';
+import { hotel, roomType, users } from 'utils/db-schema';
 
 let db: Database;
 let app: ReturnType<typeof createApp>;
+let validPayload: {
+  hotelId: number;
+  roomTypeId: number;
+  userId: number;
+  guestEmail: string;
+  startDate: string;
+  endDate: string;
+};
 
 beforeAll(async () => {
   db = await createTestDb();
@@ -15,13 +24,35 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await resetTestDb(db);
-});
 
-const validPayload = {
-  guestName: 'Rate Limit Guest',
-  checkIn: '2026-11-01',
-  checkOut: '2026-11-03',
-};
+  const testHotel = await insertOneOrThrow(
+    db
+      .insert(hotel)
+      .values({ name: 'Test Hotel', address: '1 Test St', location: 'Testville' })
+      .returning(),
+  );
+  const testRoomType = await insertOneOrThrow(
+    db
+      .insert(roomType)
+      .values({ hotelId: testHotel.hotelId, name: 'Standard', maxOccupancy: 2 })
+      .returning(),
+  );
+  const testUser = await insertOneOrThrow(
+    db
+      .insert(users)
+      .values({ email: 'rate@example.com', role: 'guest', firstName: 'Rate', lastName: 'Limit' })
+      .returning(),
+  );
+
+  validPayload = {
+    hotelId: testHotel.hotelId,
+    roomTypeId: testRoomType.roomTypeId,
+    userId: testUser.userId,
+    guestEmail: 'rate@example.com',
+    startDate: '2026-11-01',
+    endDate: '2026-11-03',
+  };
+});
 
 describe('Rate limiting', () => {
   it('includes RateLimit headers on a normal request', async () => {

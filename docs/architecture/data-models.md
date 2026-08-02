@@ -58,10 +58,10 @@ erDiagram
         string booking_id PK
         int room_type_id FK
         int hotel_id FK
-        int user_id FK "nullable - null for unregistered guest checkout"
-        string guest_email "used when user_id is null"
-        string guest_first_name "used when user_id is null"
-        string guest_last_name "used when user_id is null"
+        int user_id FK
+        string guest_email
+        string guest_first_name "optional"
+        string guest_last_name "optional"
         date start_date
         date end_date
         string status "held | confirmed | cancelled | expired"
@@ -103,10 +103,11 @@ permission levels), so they're modeled as a single `users` table with a `role` c
 additionally implies ownership of one or more `hotel` rows (a `host_id FK` on `hotel`, not shown
 above yet — added when `hotel` gets its host-assignment feature).
 
-Not every booking has a logged-in user behind it, though — guest checkout (no account) is
-supported. `booking.user_id` is **nullable**: when set, it's a registered user's booking; when
-`null`, the `guest_email` / `guest_first_name` / `guest_last_name` fields on `booking` are the only
-record of who made it. Auth is handled via Google OAuth (`google_id`), not stored passwords.
+Every booking requires both a registered user (`booking.user_id`) and a contact email
+(`booking.guest_email`) — there is no unauthenticated guest-checkout path. `guest_first_name` /
+`guest_last_name` are optional and, when present, override the display name for that booking
+(e.g. booking on someone else's behalf) without touching the `users` record itself. Auth is
+handled via Google OAuth (`google_id`), not stored passwords.
 
 ## Overbooking
 

@@ -1,12 +1,21 @@
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import request from 'supertest';
 import { createApp } from '#/app.ts';
-import { createTestDb, resetTestDb } from '../testDb.ts';
+import { createTestDb, resetTestDb, insertOneOrThrow } from '../testDb.ts';
 import { createCorsOptions } from '#/shared/cors.ts';
 import type { Database } from '#/shared/db/types.ts';
+import { hotel, roomType, users } from 'utils/db-schema';
 
 let db: Database;
 let app: ReturnType<typeof createApp>;
+let validPayload: {
+  hotelId: number;
+  roomTypeId: number;
+  userId: number;
+  guestEmail: string;
+  startDate: string;
+  endDate: string;
+};
 
 beforeAll(async () => {
   db = await createTestDb();
@@ -15,13 +24,40 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await resetTestDb(db);
-});
 
-const validPayload = {
-  guestName: 'Idempotency Guest',
-  checkIn: '2026-10-01',
-  checkOut: '2026-10-03',
-};
+  const testHotel = await insertOneOrThrow(
+    db
+      .insert(hotel)
+      .values({ name: 'Test Hotel', address: '1 Test St', location: 'Testville' })
+      .returning(),
+  );
+  const testRoomType = await insertOneOrThrow(
+    db
+      .insert(roomType)
+      .values({ hotelId: testHotel.hotelId, name: 'Standard', maxOccupancy: 2 })
+      .returning(),
+  );
+  const testUser = await insertOneOrThrow(
+    db
+      .insert(users)
+      .values({
+        email: 'idem@example.com',
+        role: 'guest',
+        firstName: 'Idempotency',
+        lastName: 'Guest',
+      })
+      .returning(),
+  );
+
+  validPayload = {
+    hotelId: testHotel.hotelId,
+    roomTypeId: testRoomType.roomTypeId,
+    userId: testUser.userId,
+    guestEmail: 'idem@example.com',
+    startDate: '2026-10-01',
+    endDate: '2026-10-03',
+  };
+});
 
 describe('Idempotency-Key handling on POST /api/bookings', () => {
   it('creates a booking normally when no key is sent', async () => {
@@ -44,7 +80,7 @@ describe('Idempotency-Key handling on POST /api/bookings', () => {
       .send(validPayload);
 
     expect(second.status).toBe(201);
-    expect(second.body.id).toBe(first.body.id);
+    expect(second.body.bookingId).toBe(first.body.bookingId);
     expect(second.headers['idempotency-replayed']).toBe('true');
 
     const all = await request(app).get('/api/bookings');
@@ -59,7 +95,7 @@ describe('Idempotency-Key handling on POST /api/bookings', () => {
     const conflict = await request(app)
       .post('/api/bookings')
       .set('Idempotency-Key', key)
-      .send({ ...validPayload, guestName: 'Someone Else' });
+      .send({ ...validPayload, guestEmail: 'someone-else@example.com' });
 
     expect(conflict.status).toBe(409);
   });

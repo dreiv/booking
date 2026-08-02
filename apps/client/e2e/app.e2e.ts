@@ -10,11 +10,18 @@ test.describe('Client App - E2E Suite', () => {
         json: {
           data: [
             {
-              id: 'bkg-1',
-              guestName: 'Playwright Guest',
-              checkIn: '2026-08-01',
-              checkOut: '2026-08-03',
-              status: 'pending',
+              bookingId: 'bfb6c1a2-1e2e-4c1b-9a8b-1234567890ab',
+              hotelId: 1,
+              roomTypeId: 1,
+              userId: 1,
+              guestEmail: 'playwright@example.com',
+              guestFirstName: 'Playwright',
+              guestLastName: 'Guest',
+              startDate: '2026-08-01',
+              endDate: '2026-08-03',
+              status: 'confirmed',
+              roomCount: 1,
+              expiresAt: null,
               createdAt: '2026-07-01T10:00:00.000Z',
             },
           ],
