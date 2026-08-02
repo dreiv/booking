@@ -10,7 +10,9 @@ future evolution. See [ADR-002](../adrs/002-temporary-booking-soft-lock.md) and
 
 - Pay-at-platform and check-in.
 - Mobile-first UI.
-- Support for cancellation and overbooking.
+- Support for cancellation and overbooking — overbooking is a per-`room_type` percentage
+  (`overbooking_rate`), applied as a multiplier against `total_inventory` in the atomic
+  reservation check. See `data-models.md`'s Overbooking section.
 - Dynamic pricing support: rates vary by date (e.g., a holiday date costs more) — the per-date
   `room_type_rate` table structurally supports this now; no demand-based repricing algorithm is
   required.

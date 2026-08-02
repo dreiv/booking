@@ -12,12 +12,13 @@ erDiagram
         string description
     }
 
-    room_type {
+     room_type {
         int room_type_id PK
         string name
         string description
         int max_occupancy
         string amenities
+        decimal overbooking_rate "percentage, e.g. 0.05 = 5% over capacity"
         int hotel_id FK
     }
 
@@ -54,7 +55,7 @@ erDiagram
     }
 
     booking {
-        int booking_id PK
+        string booking_id PK
         int room_type_id FK
         int hotel_id FK
         int user_id FK "nullable - null for unregistered guest checkout"

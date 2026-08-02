@@ -8,6 +8,8 @@ import {
   jsonb,
   pgEnum,
   serial,
+  numeric,
+  primaryKey,
 } from 'drizzle-orm/pg-core';
 
 export const bookingStatusEnum = pgEnum('booking_status', ['pending', 'confirmed', 'cancelled']);
@@ -48,4 +50,72 @@ export const users = pgTable('users', {
   lastName: text('last_name').notNull(),
 });
 
-export const schema = { bookings, idempotencyKeys, hotel, users };
+export const roomType = pgTable('room_type', {
+  roomTypeId: serial('room_type_id').primaryKey(),
+  hotelId: integer('hotel_id')
+    .notNull()
+    .references(() => hotel.hotelId),
+  name: text('name').notNull(),
+  description: text('description'),
+  maxOccupancy: integer('max_occupancy').notNull(),
+  amenities: text('amenities'),
+  overbookingRate: numeric('overbooking_rate', { precision: 4, scale: 2 }).notNull().default('0'),
+});
+
+export const room = pgTable('room', {
+  roomId: serial('room_id').primaryKey(),
+  hotelId: integer('hotel_id')
+    .notNull()
+    .references(() => hotel.hotelId),
+  roomTypeId: integer('room_type_id')
+    .notNull()
+    .references(() => roomType.roomTypeId),
+  floor: integer('floor').notNull(),
+  number: text('number').notNull(),
+});
+
+export const roomTypeRate = pgTable(
+  'room_type_rate',
+  {
+    hotelId: integer('hotel_id')
+      .notNull()
+      .references(() => hotel.hotelId),
+    roomTypeId: integer('room_type_id')
+      .notNull()
+      .references(() => roomType.roomTypeId),
+    date: date('date', { mode: 'string' }).notNull(),
+    rate: numeric('rate', { precision: 10, scale: 2 }).notNull(),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.hotelId, table.roomTypeId, table.date] }),
+  }),
+);
+
+export const roomTypeInventory = pgTable(
+  'room_type_inventory',
+  {
+    hotelId: integer('hotel_id')
+      .notNull()
+      .references(() => hotel.hotelId),
+    roomTypeId: integer('room_type_id')
+      .notNull()
+      .references(() => roomType.roomTypeId),
+    date: date('date', { mode: 'string' }).notNull(),
+    totalInventory: integer('total_inventory').notNull(),
+    totalReserved: integer('total_reserved').notNull().default(0),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.hotelId, table.roomTypeId, table.date] }),
+  }),
+);
+
+export const schema = {
+  bookings,
+  idempotencyKeys,
+  hotel,
+  users,
+  roomType,
+  room,
+  roomTypeRate,
+  roomTypeInventory,
+};
