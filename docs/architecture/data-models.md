@@ -133,7 +133,7 @@ paid is a plain `SUM(amount)` across its transactions, no `CASE` needed.
 
 - `status`: `held` → `confirmed` → (`cancelled` | `expired`)
 - `expires_at`: set when `status = held`, to `now() + <hold window>`; cleared once confirmed,
-  cancelled, or expired. Hold window is a tuning parameter — start at 10 minutes and adjust from
+  cancelled, or expired. Hold window is a tuning parameter — start at 2 hours and adjust from
   real abandonment data once there is any.
 
 ## Inventory Consistency — Atomic Conditional Update

@@ -40,7 +40,7 @@ function-based shape used elsewhere for this kind of maintenance.
 One caveat: not every hosting provider allows extensions — confirm `pg_cron` is available before
 committing to it; if it isn't, the fallback is an app-level scheduled job calling the same function.
 
-Hold TTL: start at 10 minutes, as a configurable value (env var) rather than hardcoded, and adjust
+Hold TTL: start at 2 hours, as a configurable value (env var) rather than hardcoded, and adjust
 once there's real abandonment data to tune it with.
 
 ## Consequences
