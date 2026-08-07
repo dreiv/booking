@@ -1,12 +1,18 @@
 services:
   postgres:
-    image: postgres:17-alpine
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.postgres
     container_name: booking_postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-booking}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-booking}
       POSTGRES_DB: ${POSTGRES_DB:-booking}
+    command: >
+      postgres
+      -c shared_preload_libraries=pg_cron
+      -c cron.database_name=${POSTGRES_DB:-booking}
     ports:
       - '5432:5432'
     volumes:
