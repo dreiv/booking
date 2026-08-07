@@ -1,6 +1,6 @@
 {
-  "id": "c1e23426-1c8e-468b-947a-a85683913b87",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "ffc771db-72a5-4da5-9bde-7dc0fa12f3a1",
+  "prevId": "c1e23426-1c8e-468b-947a-a85683913b87",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -97,29 +97,29 @@
         "booking_hotel_id_hotel_hotel_id_fk": {
           "name": "booking_hotel_id_hotel_hotel_id_fk",
           "tableFrom": "booking",
-          "tableTo": "hotel",
           "columnsFrom": ["hotel_id"],
+          "tableTo": "hotel",
           "columnsTo": ["hotel_id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "booking_room_type_id_room_type_room_type_id_fk": {
           "name": "booking_room_type_id_room_type_room_type_id_fk",
           "tableFrom": "booking",
-          "tableTo": "room_type",
           "columnsFrom": ["room_type_id"],
+          "tableTo": "room_type",
           "columnsTo": ["room_type_id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "booking_user_id_users_user_id_fk": {
           "name": "booking_user_id_users_user_id_fk",
           "tableFrom": "booking",
-          "tableTo": "users",
           "columnsFrom": ["user_id"],
+          "tableTo": "users",
           "columnsTo": ["user_id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -261,20 +261,20 @@
         "room_hotel_id_hotel_hotel_id_fk": {
           "name": "room_hotel_id_hotel_hotel_id_fk",
           "tableFrom": "room",
-          "tableTo": "hotel",
           "columnsFrom": ["hotel_id"],
+          "tableTo": "hotel",
           "columnsTo": ["hotel_id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "room_room_type_id_room_type_room_type_id_fk": {
           "name": "room_room_type_id_room_type_room_type_id_fk",
           "tableFrom": "room",
-          "tableTo": "room_type",
           "columnsFrom": ["room_type_id"],
+          "tableTo": "room_type",
           "columnsTo": ["room_type_id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -336,11 +336,11 @@
         "room_type_hotel_id_hotel_hotel_id_fk": {
           "name": "room_type_hotel_id_hotel_hotel_id_fk",
           "tableFrom": "room_type",
-          "tableTo": "hotel",
           "columnsFrom": ["hotel_id"],
+          "tableTo": "hotel",
           "columnsTo": ["hotel_id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -390,20 +390,20 @@
         "room_type_inventory_hotel_id_hotel_hotel_id_fk": {
           "name": "room_type_inventory_hotel_id_hotel_hotel_id_fk",
           "tableFrom": "room_type_inventory",
-          "tableTo": "hotel",
           "columnsFrom": ["hotel_id"],
+          "tableTo": "hotel",
           "columnsTo": ["hotel_id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "room_type_inventory_room_type_id_room_type_room_type_id_fk": {
           "name": "room_type_inventory_room_type_id_room_type_room_type_id_fk",
           "tableFrom": "room_type_inventory",
-          "tableTo": "room_type",
           "columnsFrom": ["room_type_id"],
+          "tableTo": "room_type",
           "columnsTo": ["room_type_id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -451,20 +451,20 @@
         "room_type_rate_hotel_id_hotel_hotel_id_fk": {
           "name": "room_type_rate_hotel_id_hotel_hotel_id_fk",
           "tableFrom": "room_type_rate",
-          "tableTo": "hotel",
           "columnsFrom": ["hotel_id"],
+          "tableTo": "hotel",
           "columnsTo": ["hotel_id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         },
         "room_type_rate_room_type_id_room_type_room_type_id_fk": {
           "name": "room_type_rate_room_type_id_room_type_room_type_id_fk",
           "tableFrom": "room_type_rate",
-          "tableTo": "room_type",
           "columnsFrom": ["room_type_id"],
+          "tableTo": "room_type",
           "columnsTo": ["room_type_id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -526,11 +526,11 @@
         "transaction_booking_id_booking_booking_id_fk": {
           "name": "transaction_booking_id_booking_booking_id_fk",
           "tableFrom": "transaction",
-          "tableTo": "booking",
           "columnsFrom": ["booking_id"],
+          "tableTo": "booking",
           "columnsTo": ["booking_id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -587,13 +587,13 @@
       "uniqueConstraints": {
         "users_email_unique": {
           "name": "users_email_unique",
-          "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": ["email"],
+          "nullsNotDistinct": false
         },
         "users_google_id_unique": {
           "name": "users_google_id_unique",
-          "nullsNotDistinct": false,
-          "columns": ["google_id"]
+          "columns": ["google_id"],
+          "nullsNotDistinct": false
         }
       },
       "policies": {},
@@ -619,10 +619,10 @@
     }
   },
   "schemas": {},
+  "views": {},
   "sequences": {},
   "roles": {},
   "policies": {},
-  "views": {},
   "_meta": {
     "columns": {},
     "schemas": {},

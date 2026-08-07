@@ -5,8 +5,15 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1786106037857,
-      "tag": "0000_pg_cron_pruning",
+      "when": 1786107958376,
+      "tag": "0000_colorful_george_stacy",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1786107995819,
+      "tag": "0001_pg_cron_pruning",
       "breakpoints": true
     }
   ]

@@ -1,3 +1,4 @@
+-- Custom SQL migration file, put your code below!
 CREATE EXTENSION IF NOT EXISTS pg_cron;
 --> statement-breakpoint
 -- Replace the insert-trigger approach with a scheduled job, and extend the
@@ -15,10 +16,8 @@ DROP TRIGGER IF EXISTS trg_prune_idempotency_keys ON idempotency_keys;
 --> statement-breakpoint
 DROP FUNCTION IF EXISTS prune_expired_idempotency_keys_trigger();
 --> statement-breakpoint
--- Release inventory + expire any booking hold past its TTL. Both the
--- inventory release and the status flip happen per booking, and
--- SKIP LOCKED means a booking mid-confirm/cancel is left alone this run
--- and picked up next run if it's still 'held' and past expires_at.
+-- Release inventory + expire held bookings past their TTL.
+-- SKIP LOCKED skips bookings mid-confirm/cancel; picked up next run.
 CREATE OR REPLACE FUNCTION prune_expired_booking_holds_now()
 RETURNS void AS $$
 DECLARE
@@ -46,6 +45,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 --> statement-breakpoint
-SELECT cron.schedule('prune-expired-booking-holds', '* * * * *', $$SELECT prune_expired_booking_holds_now();$$);
+SELECT cron.schedule('prune-expired-booking-holds', '0 */2 * * *', $$SELECT prune_expired_booking_holds_now();$$);
 --> statement-breakpoint
 SELECT cron.schedule('prune-idempotency-keys', '0 * * * *', $$SELECT prune_expired_idempotency_keys_now();$$);
+--> statement-breakpoint
+-- Purge old pg_cron logs, keep 7 days
+SELECT cron.schedule('purge-cron-history', '0 3 * * *', $$DELETE FROM cron.job_run_details WHERE end_time < now() - interval '7 days'$$);
