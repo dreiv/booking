@@ -18,7 +18,7 @@ erDiagram
         string description
         int max_occupancy
         string amenities
-        decimal overbooking_rate "percentage, e.g. 0.05 = 5% over capacity"
+        decimal overbooking_rate "percentage, e.g. 0.05 = 5% over capacity; 2 decimal places (whole-percent granularity)"
         int hotel_id FK
     }
 
@@ -31,15 +31,15 @@ erDiagram
     }
 
     room_type_rate {
+        int hotel_id PK, FK
+        int room_type_id PK, FK
         date date PK
         decimal rate
-        int room_type_id PK, FK
-        int hotel_id PK, FK
     }
 
     room_type_inventory {
-        int room_type_id PK, FK
         int hotel_id PK, FK
+        int room_type_id PK, FK
         date date PK
         int total_inventory
         int total_reserved
@@ -55,7 +55,7 @@ erDiagram
     }
 
     booking {
-        string booking_id PK
+        uuid booking_id PK
         int room_type_id FK
         int hotel_id FK
         int user_id FK
@@ -72,7 +72,7 @@ erDiagram
 
     transaction {
         int transaction_id PK
-        string booking_id FK
+        uuid booking_id FK
         string transaction_type "payment | refund"
         decimal amount
         timestamp transaction_date
@@ -91,7 +91,7 @@ erDiagram
 
     hotel ||--o{ booking : "has"
     room_type ||--o{ booking : "has"
-    users |o--o{ booking : "makes"
+    users ||--o{ booking : "makes"
 
     booking ||--o{ transaction : "has"
 ```
@@ -104,19 +104,22 @@ additionally implies ownership of one or more `hotel` rows (a `host_id FK` on `h
 above yet — added when `hotel` gets its host-assignment feature).
 
 Every booking requires both a registered user (`booking.user_id`) and a contact email
-(`booking.guest_email`) — there is no unauthenticated guest-checkout path. `guest_first_name` /
-`guest_last_name` are optional and, when present, override the display name for that booking
-(e.g. booking on someone else's behalf) without touching the `users` record itself. Auth is
-handled via Google OAuth (`google_id`), not stored passwords.
+(`booking.guest_email`) — there is no unauthenticated guest-checkout path. `user_id` is required
+(non-nullable) on `booking`, matching the ERD's `users ||--o{ booking` relationship above.
+`guest_first_name` / `guest_last_name` are optional and, when present, override the display name
+for that booking (e.g. booking on someone else's behalf) without touching the `users` record
+itself. Auth is handled via Google OAuth (`google_id`), not stored passwords.
 
 ## Overbooking
 
 Each `room_type` carries an `overbooking_rate` — a percentage stored as a decimal (e.g. `0.05`
 = allow bookings up to 5% over `total_inventory`), set per room type rather than per hotel,
-since cancellation/no-show rates vary by room category. Default is `0` (no overbooking) unless
-explicitly configured. This changes the atomic conditional `UPDATE` in the Inventory
-Consistency section below: the capacity check becomes
-`total_reserved + n <= total_inventory * (1 + overbooking_rate)` rather than the flat
+since cancellation/no-show rates vary by room category. Stored as `numeric(4,2)`, so the
+usable range is whole-percent increments (e.g. `0.05`, `0.12`) — finer-grained rates like `0.055`
+aren't representable at the current precision; widen the column if sub-percent tuning turns out
+to be needed. Default is `0` (no overbooking) unless explicitly configured. This changes the
+atomic conditional `UPDATE` in the Inventory Consistency section below: the capacity check
+becomes `total_reserved + n <= total_inventory * (1 + overbooking_rate)` rather than the flat
 `<= total_inventory`.
 
 ## Transactions
