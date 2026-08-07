@@ -24,7 +24,7 @@ const [seedRoomType] = await db
     name: 'Standard Double',
     description: 'A comfortable double room.',
     maxOccupancy: 2,
-    amenities: 'wifi, tv, air conditioning',
+    amenities: ['wifi', 'pool', 'parking'],
   })
   .returning();
 if (!seedRoomType) throw new Error('Failed to seed room type');

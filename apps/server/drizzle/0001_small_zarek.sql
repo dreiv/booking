@@ -48,7 +48,7 @@ CREATE TABLE "room_type" (
 	"name" text NOT NULL,
 	"description" text,
 	"max_occupancy" integer NOT NULL,
-	"amenities" text,
+	"amenities" text[],
 	"overbooking_rate" numeric(4, 2) DEFAULT '0' NOT NULL
 );
 --> statement-breakpoint
@@ -99,4 +99,14 @@ ALTER TABLE "room_type_inventory" ADD CONSTRAINT "room_type_inventory_hotel_id_h
 ALTER TABLE "room_type_inventory" ADD CONSTRAINT "room_type_inventory_room_type_id_room_type_room_type_id_fk" FOREIGN KEY ("room_type_id") REFERENCES "public"."room_type"("room_type_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "room_type_rate" ADD CONSTRAINT "room_type_rate_hotel_id_hotel_hotel_id_fk" FOREIGN KEY ("hotel_id") REFERENCES "public"."hotel"("hotel_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "room_type_rate" ADD CONSTRAINT "room_type_rate_room_type_id_room_type_room_type_id_fk" FOREIGN KEY ("room_type_id") REFERENCES "public"."room_type"("room_type_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "transaction" ADD CONSTRAINT "transaction_booking_id_booking_booking_id_fk" FOREIGN KEY ("booking_id") REFERENCES "public"."booking"("booking_id") ON DELETE no action ON UPDATE no action;
+ALTER TABLE "transaction" ADD CONSTRAINT "transaction_booking_id_booking_booking_id_fk" FOREIGN KEY ("booking_id") REFERENCES "public"."booking"("booking_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "booking_user_idx" ON "booking" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "booking_room_type_dates_idx" ON "booking" USING btree ("room_type_id","check_in","check_out");--> statement-breakpoint
+CREATE INDEX "hotel_location_trgm_idx" ON "hotel" USING gin ("location" gin_trgm_ops);--> statement-breakpoint
+CREATE INDEX "room_room_type_idx" ON "room" USING btree ("room_type_id");--> statement-breakpoint
+CREATE INDEX "room_type_hotel_idx" ON "room_type" USING btree ("hotel_id");--> statement-breakpoint
+CREATE INDEX "room_type_hotel_occupancy_idx" ON "room_type" USING btree ("hotel_id","max_occupancy");--> statement-breakpoint
+CREATE INDEX "room_type_amenities_idx" ON "room_type" USING gin ("amenities");--> statement-breakpoint
+CREATE INDEX "room_type_inventory_room_type_date_idx" ON "room_type_inventory" USING btree ("room_type_id","date");--> statement-breakpoint
+CREATE INDEX "room_type_rate_date_rate_idx" ON "room_type_rate" USING btree ("date","rate");--> statement-breakpoint
+CREATE INDEX "transaction_booking_idx" ON "transaction" USING btree ("booking_id");
