@@ -1,40 +1,70 @@
 import { z } from 'zod';
-import { bookingSchema, createBookingSchema } from 'utils/booking-schema';
+import { bookingSchema, createBookingSchema, bookingQuerySchema } from 'utils/booking-schema';
+import { problemDetailsSchema } from 'utils/problem-details-schema';
+import { authHeaders } from './identity.ts';
 
 export type Booking = z.infer<typeof bookingSchema>;
 export type CreateBookingInput = z.infer<typeof createBookingSchema>;
+export type BookingQuery = Partial<z.infer<typeof bookingQuerySchema>>;
 
-const bookingsResponseSchema = z.object({ data: bookingSchema.array() });
+const paginatedBookingsSchema = z.object({
+  data: bookingSchema.array(),
+  meta: z.object({
+    page: z.number(),
+    limit: z.number(),
+    totalRecords: z.number(),
+    totalPages: z.number(),
+  }),
+});
 
-export async function fetchBookings(): Promise<Booking[]> {
-  const res = await fetch('/api/v1/bookings');
+export type PaginatedBookings = z.infer<typeof paginatedBookingsSchema>;
+
+// Extracts error details from problem+json body or falls back to status code.
+async function extractErrorMessage(res: Response): Promise<string> {
+  try {
+    const body: unknown = await res.json();
+    const problem = problemDetailsSchema.safeParse(body);
+    if (problem.success) return problem.data.detail;
+  } catch {
+    // Non-JSON response
+  }
+  return `Request failed with status ${res.status}`;
+}
+
+export async function fetchBookings(query: BookingQuery = {}): Promise<PaginatedBookings> {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) {
+    if (value !== undefined) params.set(key, String(value));
+  }
+  const qs = params.toString();
+
+  const res = await fetch(`/api/v1/bookings${qs ? `?${qs}` : ''}`, {
+    headers: authHeaders(),
+  });
   if (!res.ok) {
-    throw new Error(`Failed to fetch bookings: ${res.status}`);
+    throw new Error(await extractErrorMessage(res));
   }
   const body: unknown = await res.json();
-  const result = bookingsResponseSchema.safeParse(body);
+  const result = paginatedBookingsSchema.safeParse(body);
   if (!result.success) {
     throw new Error(`Received malformed bookings response: ${result.error.message}`);
   }
-  return result.data.data;
+  return result.data;
 }
 
-/**
- * Creates a booking. Sends a fresh Idempotency-Key with every call so a dropped
- * response or an accidental double-submit safely retries instead of creating
- * a duplicate booking.
- */
+// Creates a booking using an idempotency key to prevent duplicate creation.
 export async function createBooking(input: CreateBookingInput): Promise<Booking> {
+  const headers = new Headers(authHeaders());
+  headers.set('Content-Type', 'application/json');
+  headers.set('Idempotency-Key', crypto.randomUUID());
+
   const res = await fetch('/api/v1/bookings', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Idempotency-Key': crypto.randomUUID(),
-    },
+    headers,
     body: JSON.stringify(input),
   });
   if (!res.ok) {
-    throw new Error(`Failed to create booking: ${res.status}`);
+    throw new Error(await extractErrorMessage(res));
   }
   const body: unknown = await res.json();
   const result = bookingSchema.safeParse(body);
