@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import request from 'supertest';
 import { createApp } from '#/app.ts';
-import { createTestDb, resetTestDb, insertOneOrThrow } from '../testDb.ts';
+import { createTestDb, resetTestDb, insertOneOrThrow, seedInventory } from '../testDb.ts';
 import { createCorsOptions } from '#/shared/cors.ts';
 import type { Database } from '#/shared/db/types.ts';
 import { hotel, roomType, users } from 'utils/db-schema';
@@ -57,11 +57,21 @@ beforeEach(async () => {
     checkIn: '2026-10-01',
     checkOut: '2026-10-03',
   };
+
+  await seedInventory(db, {
+    hotelId: testHotel.hotelId,
+    roomTypeId: testRoomType.roomTypeId,
+    checkIn: validPayload.checkIn,
+    checkOut: validPayload.checkOut,
+  });
 });
 
-describe('Idempotency-Key handling on POST /api/bookings', () => {
+describe('Idempotency-Key handling on POST /api/v1/bookings', () => {
   it('creates a booking normally when no key is sent', async () => {
-    const response = await request(app).post('/api/bookings').send(validPayload);
+    const response = await request(app)
+      .post('/api/v1/bookings')
+      .set('x-user-id', String(validPayload.userId))
+      .send(validPayload);
     expect(response.status).toBe(201);
   });
 
@@ -69,13 +79,15 @@ describe('Idempotency-Key handling on POST /api/bookings', () => {
     const key = 'idem-key-1';
 
     const first = await request(app)
-      .post('/api/bookings')
+      .post('/api/v1/bookings')
+      .set('x-user-id', String(validPayload.userId))
       .set('Idempotency-Key', key)
       .send(validPayload);
     expect(first.status).toBe(201);
 
     const second = await request(app)
-      .post('/api/bookings')
+      .post('/api/v1/bookings')
+      .set('x-user-id', String(validPayload.userId))
       .set('Idempotency-Key', key)
       .send(validPayload);
 
@@ -83,17 +95,24 @@ describe('Idempotency-Key handling on POST /api/bookings', () => {
     expect(second.body.bookingId).toBe(first.body.bookingId);
     expect(second.headers['idempotency-replayed']).toBe('true');
 
-    const all = await request(app).get('/api/bookings');
+    const all = await request(app)
+      .get('/api/v1/bookings')
+      .set('x-user-id', String(validPayload.userId));
     expect(all.body.data).toHaveLength(1);
   });
 
   it('rejects reuse of the same key with a different payload', async () => {
     const key = 'idem-key-2';
 
-    await request(app).post('/api/bookings').set('Idempotency-Key', key).send(validPayload);
+    await request(app)
+      .post('/api/v1/bookings')
+      .set('x-user-id', String(validPayload.userId))
+      .set('Idempotency-Key', key)
+      .send(validPayload);
 
     const conflict = await request(app)
-      .post('/api/bookings')
+      .post('/api/v1/bookings')
+      .set('x-user-id', String(validPayload.userId))
       .set('Idempotency-Key', key)
       .send({ ...validPayload, guestEmail: 'someone-else@example.com' });
 
@@ -102,7 +121,8 @@ describe('Idempotency-Key handling on POST /api/bookings', () => {
 
   it('rejects a key that exceeds the maximum length', async () => {
     const response = await request(app)
-      .post('/api/bookings')
+      .post('/api/v1/bookings')
+      .set('x-user-id', String(validPayload.userId))
       .set('Idempotency-Key', 'a'.repeat(256))
       .send(validPayload);
 

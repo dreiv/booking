@@ -7,7 +7,7 @@ export type CreateBookingInput = z.infer<typeof createBookingSchema>;
 const bookingsResponseSchema = z.object({ data: bookingSchema.array() });
 
 export async function fetchBookings(): Promise<Booking[]> {
-  const res = await fetch('/api/bookings');
+  const res = await fetch('/api/v1/bookings');
   if (!res.ok) {
     throw new Error(`Failed to fetch bookings: ${res.status}`);
   }
@@ -25,7 +25,7 @@ export async function fetchBookings(): Promise<Booking[]> {
  * a duplicate booking.
  */
 export async function createBooking(input: CreateBookingInput): Promise<Booking> {
-  const res = await fetch('/api/bookings', {
+  const res = await fetch('/api/v1/bookings', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

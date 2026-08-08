@@ -8,6 +8,7 @@ import { booking, hotel, roomType, users } from 'utils/db-schema';
 
 let db: Database;
 let app: ReturnType<typeof createApp>;
+let testUser: { userId: number };
 
 beforeAll(async () => {
   db = await createTestDb();
@@ -29,7 +30,7 @@ beforeEach(async () => {
       .values({ hotelId: testHotel.hotelId, name: 'Standard', maxOccupancy: 2 })
       .returning(),
   );
-  const testUser = await insertOneOrThrow(
+  testUser = await insertOneOrThrow(
     db
       .insert(users)
       .values({
@@ -75,26 +76,35 @@ beforeEach(async () => {
   ]);
 });
 
-describe('GET /api/bookings query support', () => {
+describe('GET /api/v1/bookings query support', () => {
   it('returns pagination meta alongside the data array', async () => {
-    const response = await request(app).get('/api/bookings');
+    const response = await request(app)
+      .get('/api/v1/bookings')
+      .set('x-user-id', String(testUser.userId));
     expect(response.body.meta).toEqual({ page: 1, limit: 20, totalRecords: 3, totalPages: 1 });
   });
 
   it('searches by guest last name, case-insensitively', async () => {
-    const response = await request(app).get('/api/bookings').query({ search: 'turing' });
+    const response = await request(app)
+      .get('/api/v1/bookings')
+      .set('x-user-id', String(testUser.userId))
+      .query({ search: 'turing' });
     expect(response.body.data).toHaveLength(1);
     expect(response.body.data[0].guestLastName).toBe('Turing');
   });
 
   it('rejects an unrecognized filter key', async () => {
-    const response = await request(app).get('/api/bookings').query({ rooomType: 'suite' });
+    const response = await request(app)
+      .get('/api/v1/bookings')
+      .set('x-user-id', String(testUser.userId))
+      .query({ rooomType: 'suite' });
     expect(response.status).toBe(400);
   });
 
   it('rejects duplicate values for the same filter', async () => {
     const response = await request(app)
-      .get('/api/bookings')
+      .get('/api/v1/bookings')
+      .set('x-user-id', String(testUser.userId))
       .query({ status: ['confirmed', 'cancelled'] });
     expect(response.status).toBe(400);
   });
@@ -103,7 +113,10 @@ describe('GET /api/bookings query support', () => {
     const tooManyParams = Object.fromEntries(
       Array.from({ length: 11 }, (_, i) => [`param${i}`, 'x']),
     );
-    const response = await request(app).get('/api/bookings').query(tooManyParams);
+    const response = await request(app)
+      .get('/api/v1/bookings')
+      .set('x-user-id', String(testUser.userId))
+      .query(tooManyParams);
     expect(response.status).toBe(400);
   });
 });

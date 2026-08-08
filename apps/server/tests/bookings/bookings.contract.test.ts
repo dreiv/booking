@@ -3,7 +3,7 @@ import request from 'supertest';
 import { createApp } from '#/app.ts';
 import { bookingSchema } from 'utils/booking-schema';
 import { problemDetailsSchema } from 'utils/problem-details-schema';
-import { createTestDb, insertOneOrThrow, resetTestDb } from '../testDb.ts';
+import { createTestDb, insertOneOrThrow, resetTestDb, seedInventory } from '../testDb.ts';
 import { createCorsOptions } from '#/shared/cors.ts';
 import type { Database } from '#/shared/db/types.ts';
 import { hotel, roomType, users } from 'utils/db-schema';
@@ -43,8 +43,10 @@ beforeEach(async () => {
 });
 
 describe('Bookings API contract', () => {
-  it('GET /api/bookings response items conform to bookingSchema', async () => {
-    const response = await request(app).get('/api/bookings');
+  it('GET /api/v1/bookings response items conform to bookingSchema', async () => {
+    const response = await request(app)
+      .get('/api/v1/bookings')
+      .set('x-user-id', String(testUser.userId));
 
     const listSchema = bookingSchema.array();
     const result = listSchema.safeParse(response.body.data);
@@ -52,37 +54,49 @@ describe('Bookings API contract', () => {
     expect(result.success).toBe(true);
   });
 
-  it('POST /api/bookings response conforms to bookingSchema', async () => {
-    const response = await request(app).post('/api/bookings').send({
+  it('POST /api/v1/bookings response conforms to bookingSchema', async () => {
+    await seedInventory(db, {
       hotelId: testHotel.hotelId,
       roomTypeId: testRoomType.roomTypeId,
-      userId: testUser.userId,
-      guestEmail: 'guest@example.com',
       checkIn: '2026-09-01',
       checkOut: '2026-09-03',
     });
+
+    const response = await request(app)
+      .post('/api/v1/bookings')
+      .set('x-user-id', String(testUser.userId))
+      .send({
+        hotelId: testHotel.hotelId,
+        roomTypeId: testRoomType.roomTypeId,
+        userId: testUser.userId,
+        guestEmail: 'guest@example.com',
+        checkIn: '2026-09-01',
+        checkOut: '2026-09-03',
+      });
 
     const result = bookingSchema.safeParse(response.body);
     expect(result.success).toBe(true);
   });
 
-  it('GET /api/bookings/:id with a malformed id conforms to problemDetailsSchema', async () => {
-    const response = await request(app).get('/api/bookings/not-a-uuid');
+  it('GET /api/v1/bookings/:id with a malformed id conforms to problemDetailsSchema', async () => {
+    const response = await request(app).get('/api/v1/bookings/not-a-uuid');
 
     expect(response.headers['content-type']).toMatch(/application\/problem\+json/);
     const result = problemDetailsSchema.safeParse(response.body);
     expect(result.success).toBe(true);
   });
 
-  it('GET /api/bookings/:id with a nonexistent id conforms to problemDetailsSchema', async () => {
-    const response = await request(app).get('/api/bookings/00000000-0000-0000-0000-000000000000');
+  it('GET /api/v1/bookings/:id with a nonexistent id conforms to problemDetailsSchema', async () => {
+    const response = await request(app).get(
+      '/api/v1/bookings/00000000-0000-0000-0000-000000000000',
+    );
 
     const result = problemDetailsSchema.safeParse(response.body);
     expect(result.success).toBe(true);
   });
 
-  it('POST /api/bookings with an invalid payload conforms to problemDetailsSchema', async () => {
-    const response = await request(app).post('/api/bookings').send({});
+  it('POST /api/v1/bookings with an invalid payload conforms to problemDetailsSchema', async () => {
+    const response = await request(app).post('/api/v1/bookings').send({});
 
     const result = problemDetailsSchema.safeParse(response.body);
     expect(result.success).toBe(true);

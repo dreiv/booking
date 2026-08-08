@@ -9,6 +9,9 @@
   "exports": {
     "./db-schema": "./src/db/schema.ts",
     "./booking-schema": "./src/booking/schema.ts",
+    "./hotel-schema": "./src/hotel/schema.ts",
+    "./room-type-schema": "./src/room-type/schema.ts",
+    "./search-schema": "./src/search/schema.ts",
     "./idempotency-schema": "./src/idempotency/schema.ts",
     "./problem-details-schema": "./src/problem-details/schema.ts",
     "./package.json": "./package.json"

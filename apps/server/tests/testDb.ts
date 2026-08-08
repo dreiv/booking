@@ -5,7 +5,8 @@ import { sql } from 'drizzle-orm';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { schema } from 'utils/db-schema';
+import { schema, roomTypeInventory } from 'utils/db-schema';
+import { getNightsInRange } from 'utils/booking-schema';
 import type { Database } from '../src/shared/db/types.ts';
 
 const MIGRATIONS_DIR = fileURLToPath(new URL('../drizzle', import.meta.url));
@@ -45,4 +46,27 @@ export async function insertOneOrThrow<T>(rows: Promise<T[]>): Promise<T> {
   const [first] = await rows;
   if (!first) throw new Error('Expected insert to return at least one row, got none');
   return first;
+}
+
+export async function seedInventory(
+  db: Database,
+  params: {
+    hotelId: number;
+    roomTypeId: number;
+    checkIn: string;
+    checkOut: string;
+    totalInventory?: number;
+  },
+): Promise<void> {
+  const nights = getNightsInRange(params.checkIn, params.checkOut);
+  if (nights.length === 0) return;
+
+  await db.insert(roomTypeInventory).values(
+    nights.map((date) => ({
+      hotelId: params.hotelId,
+      roomTypeId: params.roomTypeId,
+      date,
+      totalInventory: params.totalInventory ?? 20,
+    })),
+  );
 }

@@ -41,25 +41,27 @@ beforeEach(async () => {
 });
 
 describe('Bookings API', () => {
-  it('GET /api/bookings returns the mock list', async () => {
-    const response = await request(app).get('/api/bookings');
+  it('GET /api/v1/bookings returns the list', async () => {
+    const response = await request(app)
+      .get('/api/v1/bookings')
+      .set('x-user-id', String(testUser.userId));
     expect(response.status).toBe(200);
     expect(Array.isArray(response.body.data)).toBe(true);
   });
 
-  it('POST /api/bookings rejects an invalid payload', async () => {
-    const response = await request(app).post('/api/bookings').send({});
+  it('POST /api/v1/bookings rejects an invalid payload', async () => {
+    const response = await request(app).post('/api/v1/bookings').send({});
     expect(response.status).toBe(400);
   });
 
-  it('GET /api/bookings/:id with a malformed id returns JSON 400, not an HTML 500', async () => {
-    const response = await request(app).get('/api/bookings/not-a-uuid');
+  it('GET /api/v1/bookings/:id with a malformed id returns JSON 400, not an HTML 500', async () => {
+    const response = await request(app).get('/api/v1/bookings/not-a-uuid');
     expect(response.status).toBe(400);
     expect(response.headers['content-type']).toMatch(/json/);
   });
 
-  it('POST /api/bookings rejects an checkOut before checkIn', async () => {
-    const response = await request(app).post('/api/bookings').send({
+  it('POST /api/v1/bookings rejects an checkOut before checkIn', async () => {
+    const response = await request(app).post('/api/v1/bookings').send({
       hotelId: testHotel.hotelId,
       roomTypeId: testRoomType.roomTypeId,
       userId: testUser.userId,
