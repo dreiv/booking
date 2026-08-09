@@ -20,8 +20,12 @@
     "lhci": "lhci autorun"
   },
   "dependencies": {
+    "@pinia/colada": "catalog:",
+    "@vueuse/core": "catalog:",
+    "pinia": "catalog:",
     "utils": "workspace:*",
     "vue": "catalog:",
+    "vue-router": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -29,6 +33,8 @@
     "@lhci/cli": "catalog:",
     "@playwright/test": "catalog:",
     "@size-limit/preset-app": "catalog:",
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/vue3-vite": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "@types/node": "catalog:",
     "@vitejs/plugin-vue": "catalog:",
@@ -37,8 +43,10 @@
     "axe-core": "catalog:",
     "knip": "catalog:",
     "msw": "catalog:",
+    "msw-storybook-addon": "catalog:",
     "playwright": "catalog:",
     "size-limit": "catalog:",
+    "storybook": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
