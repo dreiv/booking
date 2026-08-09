@@ -16,6 +16,8 @@
     "test:browser": "vp test --project browser",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
     "size": "pnpm build && size-limit",
     "lhci": "lhci autorun"
   },
@@ -64,5 +66,10 @@
       "path": "dist/assets/*.css",
       "limit": "50 kB"
     }
-  ]
+  ],
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
 }

@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.storybook.tsbuildinfo",
+    "types": ["vite/client", "msw-storybook-addon/csf3"],
+    "paths": { "#/*": ["../src/*"] }
+  },
+  "include": ["**/*.ts"]
+}
