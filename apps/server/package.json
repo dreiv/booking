@@ -7,7 +7,7 @@
     "#/*": "./src/*"
   },
   "scripts": {
-    "dev": "node --import ./src/instrumentation.ts --watch src/main.ts",
+    "dev": "node --import ./src/instrumentation.ts --watch --watch-preserve-output src/main.ts",
     "build": "vp pack",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
