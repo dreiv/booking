@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/vue3-vite';
 import { mswLoader } from 'msw-storybook-addon/csf3';
-import { handlers } from '../src/mocks/handlers';
-import '../src/style.css';
+import { handlers } from '#/mocks/handlers';
+import '#/assets/style.css';
 
 const preview: Preview = {
   parameters: {

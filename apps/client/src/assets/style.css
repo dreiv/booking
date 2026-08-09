@@ -1,0 +1,92 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-bg: var(--bg);
+  --color-text: var(--text);
+  --color-accent: var(--accent);
+  --color-accent-text: var(--accent-text);
+  --color-text-h: var(--text-h);
+  --color-border: var(--border);
+
+  --color-accent-bg: oklch(from var(--accent) l c h / 0.05);
+  --color-accent-border: oklch(from var(--accent) l c h / 0.15);
+
+  --animate-fade: fade 0.2s ease-out;
+
+  --radius-card: 1.5rem;
+  --radius-pill: 2rem;
+  --radius-hero: 3rem;
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  :root {
+    --accent: #f47121;
+    --accent-text: light-dark(#873c07, #f4893d);
+
+    --dot-color: light-dark(#e4e4e7, #27272a);
+    --bg: light-dark(#fafaf9, #1c1917);
+    --text: light-dark(#44403c, #a8a29e);
+    --text-h: light-dark(#1c1917, #fafaf9);
+    --border: light-dark(#e7e5e4, #2e2a27);
+
+    color-scheme: light dark;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: clamp(16px, 1cqi + 0.5rem, 18px);
+    line-height: 1.6;
+  }
+
+  body {
+    margin: 0;
+    color: var(--text);
+    background-color: var(--bg);
+    background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+    background-size: 24px 24px;
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
+  }
+}
+
+@layer components {
+  .nav-item,
+  .logo {
+    @apply flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all duration-200;
+  }
+
+  .router-link-active:not(.logo) {
+    @apply text-accent-text bg-accent/5 font-bold;
+  }
+
+  .router-link-active .lucide {
+    @apply text-accent;
+  }
+
+  .logo:hover .text-accent {
+    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent), transparent 50%));
+  }
+
+  .glass-button {
+    @apply cursor-pointer p-2.5 rounded-xl border border-white/20 bg-white/5
+           backdrop-blur-md saturate-150 shadow-lg transition-all duration-300
+           hover:scale-110 active:scale-95 flex items-center justify-center;
+  }
+
+  .card-action-btn {
+    @apply opacity-0 group-hover:opacity-100 text-text/40 hover:text-text hover:bg-white/20;
+  }
+
+  .card-action-btn-active {
+    @apply opacity-100 shadow-sm bg-accent-bg border-accent-border text-accent-text;
+  }
+}
