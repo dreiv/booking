@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 test.describe('Client App - E2E Suite', () => {
   test.beforeEach(async ({ page }) => {
-    await page.route('/api/bookings', async (route) => {
+    await page.route('**/api/v1/bookings**', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -54,7 +54,7 @@ test.describe('Client App - E2E Suite', () => {
   });
 
   test('handles server error response', async ({ page }) => {
-    await page.route('/api/bookings', async (route) => {
+    await page.route('**/api/v1/bookings**', async (route) => {
       await route.fulfill({ status: 500, json: { error: 'Server Error' } });
     });
 

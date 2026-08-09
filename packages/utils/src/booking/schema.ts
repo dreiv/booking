@@ -10,16 +10,16 @@ export * from './dates.ts';
 extendZodWithOpenApi(z);
 
 export const bookingSchema = createSelectSchema(booking, {
-  checkIn: (schema) => schema.date(),
-  checkOut: (schema) => schema.date(),
+  checkIn: z.string().date(),
+  checkOut: z.string().date(),
   createdAt: z.string().datetime(),
 })
   .strict()
   .openapi('Booking');
 
 export const createBookingSchema = createInsertSchema(booking, {
-  checkIn: (schema) => schema.date(),
-  checkOut: (schema) => schema.date(),
+  checkIn: z.string().date(),
+  checkOut: z.string().date(),
 })
   .pick({
     hotelId: true,
@@ -45,8 +45,8 @@ export const createBookingSchema = createInsertSchema(booking, {
 
 // Only inventory-impacting fields are updateable.
 export const updateBookingSchema = createInsertSchema(booking, {
-  checkIn: (schema) => schema.date(),
-  checkOut: (schema) => schema.date(),
+  checkIn: z.string().date(),
+  checkOut: z.string().date(),
 })
   .pick({
     checkIn: true,
