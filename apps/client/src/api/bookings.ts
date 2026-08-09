@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { bookingSchema, createBookingSchema, bookingQuerySchema } from 'utils/booking-schema';
 import { problemDetailsSchema } from 'utils/problem-details-schema';
-import { authHeaders } from './identity.ts';
+import { useSessionStore } from '#/core/stores/useSessionStore';
 
 export type Booking = z.infer<typeof bookingSchema>;
 export type CreateBookingInput = z.infer<typeof createBookingSchema>;
@@ -39,7 +39,7 @@ export async function fetchBookings(query: BookingQuery = {}): Promise<Paginated
   const qs = params.toString();
 
   const res = await fetch(`/api/v1/bookings${qs ? `?${qs}` : ''}`, {
-    headers: authHeaders(),
+    headers: useSessionStore().authHeaders(),
   });
   if (!res.ok) {
     throw new Error(await extractErrorMessage(res));
@@ -54,7 +54,7 @@ export async function fetchBookings(query: BookingQuery = {}): Promise<Paginated
 
 // Creates a booking using an idempotency key to prevent duplicate creation.
 export async function createBooking(input: CreateBookingInput): Promise<Booking> {
-  const headers = new Headers(authHeaders());
+  const headers = new Headers(useSessionStore().authHeaders());
   headers.set('Content-Type', 'application/json');
   headers.set('Idempotency-Key', crypto.randomUUID());
 
