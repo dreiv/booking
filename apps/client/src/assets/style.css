@@ -76,12 +76,6 @@
     filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent), transparent 50%));
   }
 
-  .glass-button {
-    @apply cursor-pointer p-2.5 rounded-xl border border-white/20 bg-white/5
-           backdrop-blur-md saturate-150 shadow-lg transition-all duration-300
-           hover:scale-110 active:scale-95 flex items-center justify-center;
-  }
-
   .card-action-btn {
     @apply opacity-0 group-hover:opacity-100 text-text/40 hover:text-text hover:bg-white/20;
   }
