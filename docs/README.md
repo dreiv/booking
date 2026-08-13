@@ -9,14 +9,15 @@ phase — see [ADR-003](adrs/003-modular-monolith-then-microservices.md).
 
 ## Where to Start
 
-| Doc                                                                    | Read this if...                                                 |
-| ---------------------------------------------------------------------- | --------------------------------------------------------------- |
-| [`architecture/HLD.md`](architecture/HLD.md)                           | you want the system shape, NFRs, and the booking lifecycle      |
-| [`architecture/data-models.md`](architecture/data-models.md)           | you're touching schema or the inventory-consistency logic       |
-| [`architecture/api-contracts.md`](architecture/api-contracts.md)       | you're adding or consuming an endpoint                          |
-| [`architecture/observability.md`](architecture/observability.md)       | you're adding logging, tracing, or debugging a production issue |
-| [`architecture/testing-strategy.md`](architecture/testing-strategy.md) | you're deciding where a new test belongs                        |
-| [`adrs/`](adrs/)                                                       | you want the reasoning behind a specific decision               |
+| Doc                                                                    | Read this if...                                                                                                      |
+| ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| [`architecture/HLD.md`](architecture/HLD.md)                           | you want the system shape, NFRs, and the booking lifecycle                                                           |
+| [`architecture/data-models.md`](architecture/data-models.md)           | you're touching schema or the inventory-consistency logic                                                            |
+| [`architecture/api-contracts.md`](architecture/api-contracts.md)       | you're adding or consuming an endpoint                                                                               |
+| [`architecture/observability.md`](architecture/observability.md)       | you're adding logging, tracing, or debugging a production issue                                                      |
+| [`architecture/testing-strategy.md`](architecture/testing-strategy.md) | you're deciding where a new test belongs                                                                             |
+| [`design/`](design/)                                                   | you're building or reviewing UI — guest-flow wireframes and the [component inventory](design/component-inventory.md) |
+| [`adrs/`](adrs/)                                                       | you want the reasoning behind a specific decision                                                                    |
 
 ## ADR Index
 
