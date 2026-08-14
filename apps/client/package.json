@@ -22,9 +22,9 @@
     "lhci": "lhci autorun"
   },
   "dependencies": {
+    "@lucide/vue": "catalog:",
     "@pinia/colada": "catalog:",
     "@vueuse/core": "catalog:",
-    "lucide-vue-next": "catalog:",
     "pinia": "catalog:",
     "utils": "workspace:*",
     "vue": "catalog:",

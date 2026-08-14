@@ -11,7 +11,51 @@
   --color-accent-bg: oklch(from var(--accent) l c h / 0.05);
   --color-accent-border: oklch(from var(--accent) l c h / 0.15);
 
+  --color-success: var(--success);
+  --color-success-text: var(--success-text);
+  --color-success-bg: oklch(from var(--success) l c h / 0.05);
+  --color-success-border: oklch(from var(--success) l c h / 0.15);
+
+  --color-warning: var(--warning);
+  --color-warning-text: var(--warning-text);
+  --color-warning-bg: oklch(from var(--warning) l c h / 0.05);
+  --color-warning-border: oklch(from var(--warning) l c h / 0.15);
+
+  --color-danger: var(--danger);
+  --color-danger-text: var(--danger-text);
+  --color-danger-bg: oklch(from var(--danger) l c h / 0.05);
+  --color-danger-border: oklch(from var(--danger) l c h / 0.15);
+
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+
+  --color-card: var(--bg);
+  --color-card-foreground: var(--text);
+  --color-popover: var(--bg);
+  --color-popover-foreground: var(--text);
+
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--solid-contrast);
+
+  --color-secondary: var(--border);
+  --color-secondary-foreground: var(--text-h);
+
+  --color-muted: var(--border);
+  --color-muted-foreground: oklch(from var(--text) l c h / 0.7);
+
+  --color-destructive: var(--danger);
+  --color-destructive-foreground: var(--solid-contrast);
+
+  --color-input: var(--border);
+  --color-ring: var(--accent);
+
   --animate-fade: fade 0.2s ease-out;
+
+  --radius: 0.625rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 
   --radius-card: 1.5rem;
   --radius-pill: 2rem;
@@ -33,6 +77,15 @@
   :root {
     --accent: #f47121;
     --accent-text: light-dark(#873c07, #f4893d);
+
+    --success: #16a34a;
+    --success-text: light-dark(#15803d, #4ade80);
+    --warning: #d97706;
+    --warning-text: light-dark(#92400e, #fbbf24);
+    --danger: #dc2626;
+    --danger-text: light-dark(#b91c1c, #f87171);
+
+    --solid-contrast: #fff7ed;
 
     --dot-color: light-dark(#e4e4e7, #27272a);
     --bg: light-dark(#fafaf9, #1c1917);
@@ -59,28 +112,4 @@
 }
 
 @layer components {
-  .nav-item,
-  .logo {
-    @apply flex items-center gap-2 px-3 py-1.5 rounded-xl transition-all duration-200;
-  }
-
-  .router-link-active:not(.logo) {
-    @apply text-accent-text bg-accent/5 font-bold;
-  }
-
-  .router-link-active .lucide {
-    @apply text-accent;
-  }
-
-  .logo:hover .text-accent {
-    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent), transparent 50%));
-  }
-
-  .card-action-btn {
-    @apply opacity-0 group-hover:opacity-100 text-text/40 hover:text-text hover:bg-white/20;
-  }
-
-  .card-action-btn-active {
-    @apply opacity-100 shadow-sm bg-accent-bg border-accent-border text-accent-text;
-  }
 }
