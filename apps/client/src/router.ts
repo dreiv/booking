@@ -29,6 +29,18 @@ const router = createRouter({
           meta: { roles: ['guest', 'host', 'admin'] },
         },
         {
+          path: 'bookings',
+          name: Routes.BOOKINGS,
+          component: () => import('#/domains/guest/views/BookingsView.vue'),
+          meta: { roles: ['guest', 'host', 'admin'] },
+        },
+        {
+          path: 'favorites',
+          name: Routes.FAVORITES,
+          component: () => import('#/domains/guest/views/FavoritesView.vue'),
+          meta: { roles: ['guest', 'host', 'admin'] },
+        },
+        {
           path: 'admin',
           name: Routes.ADMIN,
           component: () => import('#/domains/admin/views/AdminDashboardView.vue'),

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
+import AppHeader from '#/core/components/layout/AppHeader.vue';
 </script>
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <!-- TODO: NavBar goes here once the component library exists -->
+    <AppHeader />
+
     <main class="grow container mx-auto px-6 py-10">
       <RouterView />
     </main>

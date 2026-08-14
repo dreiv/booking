@@ -14,6 +14,6 @@ withDefaults(defineProps<IconButtonProps>(), { variant: 'ghost' });
 
 <template>
   <Button :variant="variant" size="icon" :aria-label="ariaLabel" :class="cn('rounded-full')">
-    <component :is="icon" class="size-4" />
+    <component :is="icon" class="size-5" />
   </Button>
 </template>
