@@ -26,7 +26,9 @@ const isDrawerOpen = ref(false);
         @click="isDrawerOpen = true"
       />
 
-      <RouterLink to="/" class="font-semibold text-lg"> YourLogo </RouterLink>
+      <RouterLink to="/" class="text-lg font-semibold tracking-tight">
+        <span class="text-foreground">Va</span><span class="text-primary">yo</span>
+      </RouterLink>
 
       <nav class="hidden md:flex md:items-center md:gap-6">
         <RouterLink to="/bookings" class="text-sm font-medium">Bookings</RouterLink>
