@@ -93,6 +93,7 @@
     --text-h: light-dark(#1c1917, #fafaf9);
     --border: light-dark(#e7e5e4, #2e2a27);
 
+    accent-color: var(--accent);
     color-scheme: light dark;
     font-family: 'Inter', system-ui, sans-serif;
     font-size: clamp(16px, 1cqi + 0.5rem, 18px);

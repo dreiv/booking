@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import { Sheet, SheetContent } from '#/core/components/ui/sheet';
-import { Routes } from '#/core/router/routeNames';
+import { navItems } from '#/core/router/nav-items';
 import { cn } from '#/lib/utils';
 
 const open = defineModel<boolean>('open', { required: true });
-
-const navItems = [
-  { to: { name: Routes.BOOKINGS }, name: Routes.BOOKINGS, label: 'Bookings' },
-  { to: { name: Routes.FAVORITES }, name: Routes.FAVORITES, label: 'Favorites' },
-] as const;
 </script>
 
 <template>
