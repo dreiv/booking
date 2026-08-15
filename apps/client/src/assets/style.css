@@ -26,9 +26,6 @@
   --color-danger-bg: oklch(from var(--danger) l c h / 0.05);
   --color-danger-border: oklch(from var(--danger) l c h / 0.15);
 
-  --color-background: var(--bg);
-  --color-foreground: var(--text);
-
   --color-card: var(--bg);
   --color-card-foreground: var(--text);
   --color-popover: var(--bg);
