@@ -32,19 +32,19 @@
   --color-popover-foreground: var(--text);
 
   --color-primary: var(--accent);
-  --color-primary-foreground: var(--solid-contrast);
+  --color-primary-foreground: #000;
 
   --color-secondary: var(--border);
   --color-secondary-foreground: var(--text-h);
 
   --color-muted: var(--border);
-  --color-muted-foreground: oklch(from var(--text) l c h / 0.7);
+  --color-muted-foreground: var(--muted-fg);
 
   --color-destructive: var(--danger);
-  --color-destructive-foreground: var(--solid-contrast);
+  --color-destructive-foreground: #fff;
 
   --color-input: var(--border);
-  --color-ring: var(--accent);
+  --color-ring: var(--ring);
 
   --animate-fade: fade 0.2s ease-out;
 
@@ -76,19 +76,19 @@
     --accent-text: light-dark(#873c07, #f4893d);
 
     --success: #16a34a;
-    --success-text: light-dark(#15803d, #4ade80);
+    --success-text: light-dark(#14532d, #4ade80);
     --warning: #d97706;
-    --warning-text: light-dark(#92400e, #fbbf24);
-    --danger: #dc2626;
-    --danger-text: light-dark(#b91c1c, #f87171);
-
-    --solid-contrast: #fff7ed;
+    --warning-text: light-dark(#78350f, #fbbf24);
+    --danger: #991b1b;
+    --danger-text: light-dark(#991b1b, #fca5a5);
 
     --dot-color: light-dark(#e4e4e7, #27272a);
     --bg: light-dark(#fafaf9, #1c1917);
-    --text: light-dark(#44403c, #a8a29e);
+    --text: light-dark(#44403c, #b8b2ac);
     --text-h: light-dark(#1c1917, #fafaf9);
     --border: light-dark(#e7e5e4, #2e2a27);
+    --muted-fg: light-dark(#57534e, #a8a29e);
+    --ring: light-dark(#9a3412, #fb923c);
 
     accent-color: var(--accent);
     color-scheme: light dark;
