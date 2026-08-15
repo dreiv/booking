@@ -12,7 +12,7 @@ const open = defineModel<boolean>('open', { required: true });
       <SheetTitle class="sr-only">Menu</SheetTitle>
       <SheetDescription class="sr-only">Navigate to a section</SheetDescription>
 
-      <nav class="flex flex-col gap-1 mt-8">
+      <nav class="flex flex-col gap-1 mt-8" aria-label="Mobile">
         <RouterLink
           v-for="item in navItems"
           :key="item.name"

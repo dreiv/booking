@@ -23,6 +23,7 @@ const isDrawerOpen = ref(false);
       <IconButton
         :icon="MenuIcon"
         ariaLabel="Open menu"
+        :aria-expanded="isDrawerOpen"
         class="md:hidden"
         @click="isDrawerOpen = true"
       />
@@ -34,7 +35,7 @@ const isDrawerOpen = ref(false);
         <span class="text-foreground">Va</span><span class="text-primary">yo</span>
       </RouterLink>
 
-      <nav class="hidden md:flex md:items-center md:gap-1">
+      <nav class="hidden md:flex md:items-center md:gap-1" aria-label="Main">
         <RouterLink
           v-for="item in navItems"
           :key="item.name"

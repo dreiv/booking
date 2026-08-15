@@ -1,3 +1,4 @@
+import { nextTick } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import DefaultLayout from '#/core/layouts/DefaultLayout.vue';
 import { requireRole } from '#/core/router/guards';
@@ -68,5 +69,11 @@ const router = createRouter({
 });
 
 router.beforeEach(requireRole);
+
+router.afterEach(() => {
+  void nextTick(() => {
+    document.getElementById('main-content')?.focus();
+  });
+});
 
 export default router;
