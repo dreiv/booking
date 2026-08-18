@@ -27,4 +27,8 @@ export const updateRoomTypeSchema = createRoomTypeSchema
   })
   .openapi('UpdateRoomTypeInput');
 
-export const roomTypeIdParamSchema = z.coerce.number().int().positive();
+export const roomTypeIdParamSchema = z.coerce
+  .number()
+  .int()
+  .positive()
+  .openapi({ param: { name: 'roomTypeId', in: 'path' }, example: 1 });

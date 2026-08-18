@@ -9,6 +9,7 @@ extendZodWithOpenApi(z);
 const DEFAULT_PAGE_LIMIT = 20;
 const MAX_PAGE_LIMIT = 100;
 
+const AMENITIES_SPLIT_REGEX = /\s*,\s*/;
 export const searchQuerySchema = z
   .object({
     location: z.string().trim().min(1),
@@ -22,31 +23,33 @@ export const searchQuerySchema = z
       .string()
       .trim()
       .min(1)
-      .optional()
-      .transform((value) =>
-        value
-          ? value
-              .split(',')
-              .map((amenity) => amenity.trim())
-              .filter(Boolean)
-          : undefined,
-      ),
+      .transform((val) => val.split(AMENITIES_SPLIT_REGEX).filter(Boolean))
+      .optional(),
     page: z.coerce.number().int().min(1).default(1),
     limit: z.coerce.number().int().min(1).max(MAX_PAGE_LIMIT).default(DEFAULT_PAGE_LIMIT),
   })
   .strict()
-  .refine((data) => isValidBookingDateRange(data.checkIn, data.checkOut), {
-    message: 'checkOut must be after checkIn',
-    path: ['checkOut'],
+  .superRefine((data, ctx) => {
+    if (!isValidBookingDateRange(data.checkIn, data.checkOut)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'checkOut must be after checkIn',
+        path: ['checkOut'],
+      });
+    }
+
+    if (
+      data.priceMin !== undefined &&
+      data.priceMax !== undefined &&
+      data.priceMin > data.priceMax
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'priceMin must be less than or equal to priceMax',
+        path: ['priceMin'],
+      });
+    }
   })
-  .refine(
-    (data) =>
-      data.priceMin === undefined || data.priceMax === undefined || data.priceMin <= data.priceMax,
-    {
-      message: 'priceMin must be less than or equal to priceMax',
-      path: ['priceMin'],
-    },
-  )
   .openapi('SearchQuery');
 
 export const searchResultSchema = z

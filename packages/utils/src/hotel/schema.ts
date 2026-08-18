@@ -8,12 +8,7 @@ extendZodWithOpenApi(z);
 export const hotelSchema = createSelectSchema(hotel).strict().openapi('Hotel');
 
 export const createHotelSchema = createInsertSchema(hotel)
-  .pick({
-    name: true,
-    address: true,
-    location: true,
-    description: true,
-  })
+  .pick({ name: true, address: true, location: true, description: true })
   .strict()
   .openapi('CreateHotelInput');
 
