@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useQuery } from '@pinia/colada';
 import { searchStays } from '#/api/search';
 import type { SearchQuery, SearchResult } from '#/api/search';
@@ -9,19 +10,79 @@ import { Skeleton } from '#/core/components/ui/skeleton';
 import { Badge } from '#/core/components/ui/badge';
 import { cn } from '#/lib/utils';
 
-const filters = reactive({
+const route = useRoute();
+const router = useRouter();
+
+const STORAGE_KEY = 'guest-search-filters';
+
+function toLocalISODate(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function isoDateFromToday(offsetDays: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + offsetDays);
+  return toLocalISODate(d);
+}
+
+const DEFAULT_FILTERS: SearchQuery = {
   location: '',
-  checkIn: '',
-  checkOut: '',
-  guests: 2,
+  checkIn: isoDateFromToday(0),
+  checkOut: isoDateFromToday(3),
+  guests: 1,
+};
+
+function readFiltersFromQuery(): SearchQuery | null {
+  const q = route.query;
+  const hasAny = ['location', 'checkIn', 'checkOut', 'guests'].some(
+    (k) => q[k] !== undefined && q[k] !== '',
+  );
+  if (!hasAny) return null;
+  return {
+    location: typeof q.location === 'string' ? q.location : '',
+    checkIn: typeof q.checkIn === 'string' ? q.checkIn : '',
+    checkOut: typeof q.checkOut === 'string' ? q.checkOut : '',
+    guests: q.guests ? Number(q.guests) : 1,
+  };
+}
+
+function readFiltersFromStorage(): SearchQuery | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<SearchQuery> | null;
+    if (!parsed || typeof parsed !== 'object') return null;
+    return {
+      location: typeof parsed.location === 'string' ? parsed.location : '',
+      checkIn: typeof parsed.checkIn === 'string' ? parsed.checkIn : '',
+      checkOut: typeof parsed.checkOut === 'string' ? parsed.checkOut : '',
+      guests: typeof parsed.guests === 'number' ? parsed.guests : 1,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function resolveInitialFilters(): SearchQuery {
+  return readFiltersFromQuery() ?? readFiltersFromStorage() ?? { ...DEFAULT_FILTERS };
+}
+
+const initialFilters = resolveInitialFilters();
+
+const filters = reactive({
+  location: initialFilters.location ?? '',
+  checkIn: initialFilters.checkIn ?? '',
+  checkOut: initialFilters.checkOut ?? '',
+  guests: initialFilters.guests ?? 1,
   priceMin: undefined as number | undefined,
   priceMax: undefined as number | undefined,
-  amenities: '', // comma-separated in the input, split into string[] on submit
+  amenities: '',
 });
 
-const canSearch = computed(
-  () => filters.location.trim().length > 0 && !!filters.checkIn && !!filters.checkOut,
-);
+const canSearch = computed(() => !!filters.checkIn && !!filters.checkOut);
 
 function buildQuery(page: number): SearchQuery {
   return {
@@ -41,7 +102,6 @@ function buildQuery(page: number): SearchQuery {
   };
 }
 
-// null until the user submits a search; useQuery stays disabled until then.
 const appliedQuery = ref<SearchQuery | null>(null);
 
 const { data, isLoading, error, refetch } = useQuery({
@@ -64,9 +124,48 @@ watch(data, (result) => {
   totalRecords.value = result.meta.totalRecords;
 });
 
+function persistFilters(query: SearchQuery) {
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        location: query.location ?? '',
+        checkIn: query.checkIn ?? '',
+        checkOut: query.checkOut ?? '',
+        guests: query.guests ?? 1,
+      }),
+    );
+  } catch {}
+}
+
+function syncUrlToQuery(query: SearchQuery) {
+  const target: Record<string, string> = {};
+  if (query.location) target.location = query.location;
+  if (query.checkIn) target.checkIn = query.checkIn;
+  if (query.checkOut) target.checkOut = query.checkOut;
+  if (query.guests) target.guests = String(query.guests);
+
+  const current = route.query as Record<string, string | string[] | undefined>;
+  const currentKeys = Object.keys(current).filter((k) => current[k] !== undefined);
+  const targetKeys = Object.keys(target);
+  const same =
+    targetKeys.length === currentKeys.length &&
+    targetKeys.every((k) => String(current[k]) === target[k]);
+  if (!same) {
+    router.replace({ query: target });
+  }
+}
+
+function runSearch(pageNum: number) {
+  const query = buildQuery(pageNum);
+  appliedQuery.value = query;
+  persistFilters(query);
+}
+
 function onSubmit() {
   if (!canSearch.value) return;
-  appliedQuery.value = buildQuery(1);
+  runSearch(1);
+  if (appliedQuery.value) syncUrlToQuery(appliedQuery.value);
 }
 
 async function loadMore() {
@@ -84,6 +183,12 @@ async function loadMore() {
     isLoadingMore.value = false;
   }
 }
+
+runSearch(1);
+
+onMounted(() => {
+  if (appliedQuery.value) syncUrlToQuery(appliedQuery.value);
+});
 </script>
 
 <template>

@@ -12,7 +12,7 @@ const MAX_PAGE_LIMIT = 100;
 const AMENITIES_SPLIT_REGEX = /\s*,\s*/;
 export const searchQuerySchema = z
   .object({
-    location: z.string().trim().min(1),
+    location: z.string().trim().optional(),
     checkIn: z.string().date(),
     checkOut: z.string().date(),
     guests: z.coerce.number().int().min(1).default(1),

@@ -29,10 +29,10 @@ export function createSearchRouter(db: Database) {
       queryResult.data;
     const nights = getNightsInRange(checkIn, checkOut);
 
-    const candidateConditions = [
-      ilike(hotel.location, `%${location}%`),
-      gte(roomType.maxOccupancy, guests),
-    ];
+    const candidateConditions = [gte(roomType.maxOccupancy, guests)];
+    if (location) {
+      candidateConditions.push(ilike(hotel.location, `%${location}%`));
+    }
     if (amenities && amenities.length > 0) {
       candidateConditions.push(sql`${roomType.amenities} @> ${amenities}`);
     }
